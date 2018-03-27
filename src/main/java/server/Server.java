@@ -11,8 +11,6 @@ public class Server {
         int port = (args.length != 0) ? Integer.parseInt(args[0]) : 7777;
         System.out.println("Opening server on port: " + port);
 
-        BlockingQueue<List<ClientAction>> clientActions = new ArrayBlockingQueue<>(8);
-
         try (
                 ServerSocket ss = new ServerSocket(port)
         ) {
@@ -21,7 +19,7 @@ public class Server {
             Socket clientSocket = ss.accept();
             System.out.println("Client received! Id: "+clientSocket.toString());
             while (true) {
-
+                //loop for processing clients movements and other shite
             }
         }
     }
