@@ -1,10 +1,9 @@
 package server;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 public class Server {
     public static void main(String[] args) throws Exception {
@@ -18,6 +17,8 @@ public class Server {
             System.out.println("Map generated.\nWaiting for clients...");
             Socket clientSocket = ss.accept();
             System.out.println("Client received! Id: "+clientSocket.toString());
+            DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
+            DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
             while (true) {
                 //loop for processing clients movements and other shite
             }

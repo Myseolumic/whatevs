@@ -10,13 +10,22 @@ public class ServerCommunicator {
     private DataInputStream dis;
     private DataOutputStream dos;
 
-    public ServerCommunicator() throws IOException{
+    public ServerCommunicator() throws Exception{
         serverSocket = new Socket("127.0.0.1", 1337);
         dis = new DataInputStream(serverSocket.getInputStream());
         dos = new DataOutputStream(serverSocket.getOutputStream());
     }
 
     public String getData(){
+        //pings server for something
+        //waits for server input
+        //returns the data
         return "";
+    }
+
+    public void close() throws Exception{
+        dis.close();
+        dos.close();
+        serverSocket.close();
     }
 }
