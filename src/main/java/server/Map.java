@@ -1,5 +1,10 @@
 package server;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import main.Main;
+
 public class Map {
     public static void main(String[] args) {
         Tile[][] mapike = generateMap(16);
@@ -15,6 +20,25 @@ public class Map {
                 System.out.print("[" + mapike[i][j].getSymbol() + "]");
             }
             System.out.println();
+        }
+    }
+
+    public static void visualizeMap(GridPane map, Tile[][] miniMap) {
+        for (int i = 0; i < miniMap.length; i++) {
+            for (int j = 0; j < miniMap.length; j++) {
+                if (miniMap[i][j].getSymbol() == '⇞') {
+                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream("TileSprites/tree.png"))), i, j);
+                } else if (miniMap[i][j].getSymbol() == '▦') {
+                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream("TileSprites/chest.png"))), i, j);
+                } else if (miniMap[i][j].getSymbol() == '▲') {
+                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream("TileSprites/house.png"))), i, j);
+                } else if (miniMap[i][j].getSymbol() == '◎') {
+                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream("TileSprites/trap.png"))), i, j);
+                } else if (miniMap[i][j].getSymbol() == 'X') {
+                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream("TileSprites/wastedLand.png"))), i, j);
+                }
+
+            }
         }
     }
 
