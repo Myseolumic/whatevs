@@ -16,8 +16,6 @@ public class Main extends Application {
         BorderPane client = new BorderPane();
         GridPane map = new GridPane();
         Tile[][] miniMap = Map.generateMap(16);
-
-        Map.visualizeMap(map, miniMap);
         Map.reduceMapSize(miniMap);
         Map.visualizeMap(map, miniMap);
 

@@ -1,15 +1,14 @@
 package server;
 
-import main.Player;
-
 public class TrashedArea implements Tile {
+    @Override
+    public String getResourcePath() {
+        return "TileSprites/wastedLand.png";
+    }
+
     @Override
     public void enteredTile(Player player) {
 
     }
 
-    @Override
-    public char getSymbol() {
-        return 'X';
-    }
 }

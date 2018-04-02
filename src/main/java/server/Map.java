@@ -6,38 +6,11 @@ import javafx.scene.layout.GridPane;
 import main.Main;
 
 public class Map {
-    public static void main(String[] args) {
-        Tile[][] mapike = generateMap(16);
-        displayMap(mapike);
-        reduceMapSize(mapike);
-        displayMap(mapike);
-
-    }
-
-    private static void displayMap(Tile[][] mapike) {
-        for (int i = 0; i < mapike.length; i++) {
-            for (int j = 0; j < mapike.length; j++) {
-                System.out.print("[" + mapike[i][j].getSymbol() + "]");
-            }
-            System.out.println();
-        }
-    }
 
     public static void visualizeMap(GridPane map, Tile[][] miniMap) {
         for (int i = 0; i < miniMap.length; i++) {
             for (int j = 0; j < miniMap.length; j++) {
-                if (miniMap[i][j].getSymbol() == '⇞') {
-                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream("TileSprites/tree.png"))), i, j);
-                } else if (miniMap[i][j].getSymbol() == '▦') {
-                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream("TileSprites/chest.png"))), i, j);
-                } else if (miniMap[i][j].getSymbol() == '▲') {
-                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream("TileSprites/house.png"))), i, j);
-                } else if (miniMap[i][j].getSymbol() == '◎') {
-                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream("TileSprites/trap.png"))), i, j);
-                } else if (miniMap[i][j].getSymbol() == 'X') {
-                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream("TileSprites/wastedLand.png"))), i, j);
-                }
-
+                map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream(miniMap[i][j].getResourcePath()))), i, j);
             }
         }
     }
@@ -57,7 +30,7 @@ public class Map {
                     if (surroundCheck(map, chosen, i, j)) {
                         map[i][j] = chosen;
                         break;
-                    } else if (chosen.getSymbol() == '⇞') {
+                    } else if (chosen instanceof Tree) {
                         map[i][j] = chosen;
                         break;
                     }
@@ -71,7 +44,7 @@ public class Map {
     public static Tile[][] reduceMapSize(Tile[][] map) {
         int currentReduction = 0;
         for (int i = 0; i < map.length / 2; i++) {
-            if (map[i][i].getSymbol() == 'X') {
+            if (map[i][i] instanceof TrashedArea) {
                 currentReduction += 1;
             }
         }
@@ -85,11 +58,11 @@ public class Map {
         return map;
     }
 
-    private static boolean surroundCheck(Tile[][] map, Tile c, int i, int j) {
+    public static boolean surroundCheck(Tile[][] map, Tile c, int i, int j) {
         for (int k = -1; k < 2; k++) {
             for (int l = -1; l < 2; l++) {
                 if (i + k >= 0 && j + l >= 0 && i + k < map.length && j + l < map.length && map[i + k][j + l] != null) {
-                    if (map[i + k][j + l].getSymbol() == c.getSymbol()) {
+                    if (map[i + k][j + l].getClass().equals(c.getClass())) {
                         return false;
                     }
                 }

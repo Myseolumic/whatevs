@@ -1,9 +1,10 @@
 package server;
 
-import main.Player;
-
 public class House implements Tile {
-    char symbol = '▲';
+    @Override
+    public String getResourcePath() {
+        return "TileSprites/house.png";
+    }
 
     @Override
     public void enteredTile(Player player) {
@@ -11,8 +12,4 @@ public class House implements Tile {
 
     }
 
-    @Override
-    public char getSymbol() {
-        return symbol;
-    }
 }

@@ -1,17 +1,14 @@
 package server;
 
-import main.Player;
-
 public class Chest implements Tile {
-    char symbol = '▦';
+    @Override
+    public String getResourcePath() {
+        return "TileSprites/chest.png";
+    }
 
     @Override
     public void enteredTile(Player player) {
-
     }
 
-    @Override
-    public char getSymbol() {
-        return symbol;
-    }
+
 }
