@@ -17,7 +17,10 @@ public class Main extends Application {
         GridPane map = new GridPane();
         Tile[][] miniMap = Map.generateMap(16);
         Map.reduceMapSize(miniMap);
+        Map.reduceMapSize(miniMap);
+
         Map.visualizeMap(map, miniMap);
+        //client.setBottom();
 
 
         client.setCenter(map);
