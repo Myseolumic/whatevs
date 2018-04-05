@@ -3,6 +3,8 @@ package main;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -53,7 +55,6 @@ public class Main extends Application {
         //client.setBottom();
 
 <<<<<<< HEAD
-<<<<<<< HEAD
         ////////////////////////////////////
         messages.setPrefHeight(600);
         TextField input = new TextField();
@@ -84,12 +85,13 @@ public class Main extends Application {
         client.setCenter(textArea);
         client.setBottom(textField);
 >>>>>>> origin/master
-=======
-
-        client.setCenter(map);
->>>>>>> parent of f6ecc6d... Merge branch 'master' of https://github.com/Myseolumic/whatevs
         primaryStage.setTitle("CreepyPasta");
         primaryStage.setScene(new Scene(client, 1000, 800));
+
+        //insert all needed
+
+        new Thread(new ServerCommunicator(textArea,textField)).start();
+
         primaryStage.show();
     }
 
