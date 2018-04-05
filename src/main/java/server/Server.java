@@ -2,13 +2,12 @@ package server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
     public static void main(String[] args) throws Exception {
-        int port = (args.length != 0) ? Integer.parseInt(args[0]) : 1337;
+        int port = (args.length != 0) ? Integer.parseInt(args[0]) : 7777;
         System.out.println("Opening server on port: " + port);
 
         try (
@@ -20,15 +19,9 @@ public class Server {
             System.out.println("Client received! Id: "+clientSocket.toString());
             DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
-            while (clientSocket.isConnected()) {
-                processInput(dis.readUTF(),dos);
+            while (true) {
+                //loop for processing clients movements and other shite
             }
-            dis.close();
-            dos.close();
         }
-    }
-
-    private static void processInput(String str, DataOutputStream dos) throws Exception {
-        dos.writeUTF("Client: "+str);
     }
 }
