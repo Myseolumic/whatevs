@@ -49,12 +49,8 @@ public class Main extends Application {
         GridPane map = new GridPane();
         Tile[][] miniMap = Map.generateMap(16);
         Map.reduceMapSize(miniMap);
-        Map.reduceMapSize(miniMap);
-
         Map.visualizeMap(map, miniMap);
-        //client.setBottom();
 
-<<<<<<< HEAD
         ////////////////////////////////////
         messages.setPrefHeight(600);
         TextField input = new TextField();
@@ -77,21 +73,8 @@ public class Main extends Application {
 
         client.setCenter(map);
         client.setBottom(vBox);
-=======
-        TextArea textArea = new TextArea();
-        TextField textField = new TextField();
-
-        client.setTop(map);
-        client.setCenter(textArea);
-        client.setBottom(textField);
->>>>>>> origin/master
         primaryStage.setTitle("CreepyPasta");
         primaryStage.setScene(new Scene(client, 1000, 800));
-
-        //insert all needed
-
-        new Thread(new ServerCommunicator(textArea,textField)).start();
-
         primaryStage.show();
     }
 

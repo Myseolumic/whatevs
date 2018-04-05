@@ -17,6 +17,10 @@ public class Map {
 
     public static Tile[][] generateMap(int size) {
         Tile[][] map = new Tile[size][size];
+        // ⇞  - Tree(no event)
+        // ▦ - chest(random loot)
+        // ◎ - Trap(get dmg)
+        // ▲ - House(random event)
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map.length; j++) {
                 while (true) {
