@@ -6,6 +6,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import server.Map;
 import server.Tile;
@@ -21,8 +22,10 @@ public class Main extends Application {
         Map.reduceMapSize(miniMap);
         Map.visualizeMap(map, miniMap);
 
-        TextArea textArea = new TextArea();
+        TextFlow textArea = new TextFlow();
         TextField textField = new TextField();
+
+
 
         client.setTop(map);
         client.setCenter(textArea);
