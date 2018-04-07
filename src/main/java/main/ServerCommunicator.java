@@ -1,6 +1,7 @@
 package main;
 
 import common.Player;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
@@ -13,11 +14,11 @@ import java.net.Socket;
 
 public class ServerCommunicator implements Runnable {
     private Socket serverSocket;
-    private TextFlow textArea;
+    private TextArea textArea;
     private TextField textField;
     private Player location;
 
-    public ServerCommunicator(TextFlow textArea, TextField textField) throws Exception {
+    public ServerCommunicator(TextArea textArea, TextField textField) throws Exception {
         serverSocket = new Socket("127.0.0.1", 1337);
         this.textArea = textArea;
         this.textField = textField;
@@ -40,12 +41,7 @@ public class ServerCommunicator implements Runnable {
             });
             while (true) {
                 try {
-                    String text = dis.readUTF();
-                    System.out.println(text);
-                    Text row = new Text();
-                    row.setStyle("-fx-fill: #fdff18;-fx-font-weight:bold;");
-                    row.setText(text);
-                    textArea.getChildren().add(row);
+                    textArea.appendText(dis.readUTF()+"\n");
                 } catch (IOException e) {
                     e.printStackTrace(); //tõesti tahaks teada mis võib valesti minna...
                 }

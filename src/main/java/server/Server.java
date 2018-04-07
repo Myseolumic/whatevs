@@ -38,7 +38,7 @@ public class Server {
     }
 
     private static String roundStart(Gson gson){
-        Client
+        return "";
 
     }
 }
