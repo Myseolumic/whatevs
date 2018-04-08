@@ -1,5 +1,7 @@
 package server;
 
+import com.google.gson.Gson;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,12 +16,14 @@ public class Server {
         try (
                 ServerSocket ss = new ServerSocket(port)
         ) {
+            Gson gson = new Gson();
             //map generation here
             System.out.println("Map generated.\nWaiting for clients...");
             Socket clientSocket = ss.accept();
             System.out.println("Client received! Id: "+clientSocket.toString());
             DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+            dos.writeUTF(roundStart(gson));
             while (clientSocket.isConnected()) {
                 processInput(dis.readUTF(),dos);
             }
@@ -29,6 +33,12 @@ public class Server {
     }
 
     private static void processInput(String str, DataOutputStream dos) throws Exception {
-        dos.writeUTF("Client: "+str);
+        System.out.println(str);
+        dos.writeUTF("[Client]: "+str);
+    }
+
+    private static String roundStart(Gson gson){
+        return "";
+
     }
 }
