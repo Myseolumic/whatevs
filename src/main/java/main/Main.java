@@ -8,6 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import server.Map;
+import server.Moveable;
 import server.Tile;
 
 
@@ -18,8 +19,9 @@ public class Main extends Application {
         BorderPane client = new BorderPane();
         GridPane map = new GridPane();
         Tile[][] miniMap = Map.generateMap(16);
-        Map.reduceMapSize(miniMap);
-        Map.visualizeMap(map, miniMap);
+        //Map.reduceMapSize(miniMap);
+        Moveable[][] characters = Map.generatePlayersAndAI(miniMap, 4);
+        Map.visualizeMap(map, miniMap, characters);
 
         TextArea textArea = new TextArea();
         TextField textField = new TextField();
@@ -27,7 +29,7 @@ public class Main extends Application {
         client.setTop(map);
         client.setCenter(textArea);
         client.setBottom(textField);
-        primaryStage.setTitle("CreepyPasta");
+        primaryStage.setTitle("Forest battle arena");
         primaryStage.setScene(new Scene(client, 1000, 800));
 
         //insert all needed IO/other Threads
