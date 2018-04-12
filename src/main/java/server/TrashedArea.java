@@ -1,5 +1,7 @@
 package server;
 
+import common.Player;
+
 public class TrashedArea implements Tile {
     @Override
     public String getResourcePath() {
@@ -9,6 +11,11 @@ public class TrashedArea implements Tile {
     @Override
     public void enteredTile(Player player) {
 
+    }
+
+    @Override
+    public String toString(){
+        return "TrashedTile";
     }
 
 }

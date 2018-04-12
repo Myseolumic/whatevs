@@ -1,5 +1,7 @@
 package server;
 
+import common.Player;
+
 public class Chest implements Tile {
     @Override
     public String getResourcePath() {
@@ -10,5 +12,9 @@ public class Chest implements Tile {
     public void enteredTile(Player player) {
     }
 
+    @Override
+    public String toString(){
+        return "ChestTile";
+    }
 
 }

@@ -1,5 +1,6 @@
 package server;
 
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -8,11 +9,44 @@ import main.Main;
 public class Map {
 
     public static void visualizeMap(GridPane map, Tile[][] miniMap) {
-        for (int i = 0; i < miniMap.length; i++) {
-            for (int j = 0; j < miniMap.length; j++) {
-                map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream(miniMap[i][j].getResourcePath()))), i, j);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < miniMap.length; i++) {
+                    for (int j = 0; j < miniMap.length; j++) {
+                        map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream(miniMap[i][j].getResourcePath()))), i, j);
+                    }
+                }
+            }
+        });
+    }
+    public static Tile[][] stringToTiles(String[][] miniMap) {
+        int size = miniMap.length;
+        Tile[][] mapTiles = new Tile[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                mapTiles[i][j] = stringToTile(miniMap[i][j]);
             }
         }
+        return mapTiles;
+    }
+
+    public static Tile stringToTile(String tileName){
+        switch (tileName){
+            case "DarkTile":
+                return new Dark();
+            case "HouseTile":
+                return new House();
+            case "TrapTile":
+                return new Trap();
+            case "TrashedTile":
+                return new TrashedArea();
+            case "TreeTile":
+                return new Tree();
+            case "ChestTile":
+                return new Chest();
+        }
+        return null;
     }
 
     public static Tile[][] generateMap(int size) {

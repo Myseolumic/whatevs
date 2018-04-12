@@ -1,5 +1,7 @@
 package server;
 
+import common.Player;
+
 public class Tree implements Tile{
     @Override
     public String getResourcePath() {
@@ -12,4 +14,8 @@ public class Tree implements Tile{
 
     }
 
+    @Override
+    public String toString(){
+        return "TreeTile";
+    }
 }

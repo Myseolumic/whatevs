@@ -1,16 +1,17 @@
 package common;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ClientMovementRequest implements Serializable{
 
-    private String[] directions;
+    private List<String> directions;
 
-    public ClientMovementRequest(String[] directions){
+    public ClientMovementRequest(List<String> directions){
         this.directions = directions;
     }
 
-    public String[] getDirections() {
+    public List<String> getDirections() {
         return directions;
     }
 }
