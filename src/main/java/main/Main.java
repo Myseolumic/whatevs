@@ -11,6 +11,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import server.Map;
+import server.Moveable;
+import server.Tile;
 
 public class Main extends Application {
 
@@ -23,6 +26,10 @@ public class Main extends Application {
         map.setMinHeight(640);
         map.setMinWidth(640);
         BorderPane topRight = new BorderPane();
+        Tile[][] miniMap = Map.generateMap(16);
+        //Map.reduceMapSize(miniMap);
+        Moveable[][] characters = Map.generatePlayersAndAI(miniMap, 4);
+        Map.visualizeMap(map, miniMap);
 
         HBox inventory = new HBox();
         Rectangle inventor_1 = new Rectangle(80,80, Color.GREEN);
@@ -35,6 +42,7 @@ public class Main extends Application {
 
         TextArea textArea = new TextArea();
         TextField textField = new TextField();
+
         BorderPane midLeft = new BorderPane();
         midLeft.setTop(textArea);
         midLeft.setCenter(textField);
@@ -55,7 +63,7 @@ public class Main extends Application {
 
         client.setTop(topSection);
         client.setCenter(middleSection);
-        primaryStage.setTitle("CreepyPasta");
+        primaryStage.setTitle("Forest battle arena");
         primaryStage.setScene(new Scene(client));
 
         //insert all needed IO/other Threads

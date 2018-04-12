@@ -1,7 +1,5 @@
 package server;
 
-import common.Player;
-
 public class House implements Tile {
     @Override
     public String getResourcePath() {

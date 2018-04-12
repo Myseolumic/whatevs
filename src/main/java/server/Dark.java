@@ -1,7 +1,5 @@
 package server;
 
-import common.Player;
-
 public class Dark implements Tile {
     @Override
     public void enteredTile(Player player) {

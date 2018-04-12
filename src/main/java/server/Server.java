@@ -3,7 +3,6 @@ package server;
 import com.google.gson.Gson;
 import common.ClientMovementRequest;
 import common.MapData;
-import common.Player;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

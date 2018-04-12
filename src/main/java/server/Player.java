@@ -1,6 +1,8 @@
-package common;
+package server;
 
-public class Player {
+import server.Moveable;
+
+public class Player implements Moveable {
 
     private int x,y;
 
@@ -15,5 +17,10 @@ public class Player {
 
     public int getY() {
         return y;
+    }
+
+    @Override
+    public String getResourcePath() {
+        return "TileSprites/Playertest.png";
     }
 }

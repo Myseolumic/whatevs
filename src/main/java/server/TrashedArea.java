@@ -1,7 +1,5 @@
 package server;
 
-import common.Player;
-
 public class TrashedArea implements Tile {
     @Override
     public String getResourcePath() {

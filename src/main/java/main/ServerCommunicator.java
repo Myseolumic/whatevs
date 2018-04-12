@@ -3,20 +3,14 @@ package main;
 import com.google.gson.Gson;
 import common.ClientMovementRequest;
 import common.MapData;
-import common.Player;
+import server.Player;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import server.Map;
-import server.Tile;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
