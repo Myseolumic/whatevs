@@ -1,18 +1,20 @@
-package server;
+package tiles;
 
-public class Trap implements Tile {
+import server.Player;
+
+public class Chest implements Tile {
     @Override
     public String getResourcePath() {
-        return "TileSprites/trap.png";
+        return "TileSprites/chest.png";
     }
 
     @Override
     public void enteredTile(Player player) {
-
     }
 
     @Override
     public String toString(){
-        return "TrapTile";
+        return "ChestTile";
     }
+
 }

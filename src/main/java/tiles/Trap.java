@@ -1,11 +1,13 @@
-package server;
+package tiles;
 
-public class Tree implements Tile{
+import server.Player;
+import tiles.Tile;
+
+public class Trap implements Tile {
     @Override
     public String getResourcePath() {
-        return "TileSprites/tree.png";
+        return "TileSprites/trap.png";
     }
-
 
     @Override
     public void enteredTile(Player player) {
@@ -14,6 +16,6 @@ public class Tree implements Tile{
 
     @Override
     public String toString(){
-        return "TreeTile";
+        return "TrapTile";
     }
 }

@@ -5,22 +5,25 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import main.Main;
+import tiles.*;
 
 public class Map {
 
     public static void visualizeMap(GridPane map, Tile[][] miniMap) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < miniMap.length; i++) {
-                    for (int j = 0; j < miniMap.length; j++) {
-                        map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream(miniMap[i][j].getResourcePath()))), i, j);
-                    }
+        Platform.runLater(() -> {
+            for (int i = 0; i < miniMap.length; i++) {
+                for (int j = 0; j < miniMap.length; j++) {
+                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream(miniMap[i][j].getResourcePath()))), i, j);
                 }
             }
         });
     }
 
+    public static void placePlayer(GridPane map, Player location){
+        Platform.runLater(() -> {
+            map.add(new ImageView(new Image(location.getResourcePath())), location.getX(), location.getY());
+        });
+    }
     public static Tile[][] stringToTiles(String[][] miniMap) {
         int size = miniMap.length;
         Tile[][] mapTiles = new Tile[size][size];

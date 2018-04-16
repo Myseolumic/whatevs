@@ -1,7 +1,7 @@
 package common;
 
 import server.Map;
-import server.Tile;
+import tiles.Tile;
 
 public class MapData {
     private String[][] mapTiles;

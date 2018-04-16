@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import server.Map;
 import server.Moveable;
-import server.Tile;
+import tiles.Tile;
 
 public class Main extends Application {
 
@@ -67,8 +67,10 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(client));
 
         //insert all needed IO/other Threads
-        new Thread(new ServerCommunicator(map,textArea,textField, buttons)).start();
+        ServerCommunicator comm = new ServerCommunicator(map,textArea,textField, buttons);
+        new Thread(comm).start();
 
+        primaryStage.setOnCloseRequest(event -> comm.close());
         primaryStage.show();
     }
 

@@ -1,4 +1,6 @@
-package server;
+package tiles;
+
+import server.Player;
 
 public class House implements Tile {
     @Override

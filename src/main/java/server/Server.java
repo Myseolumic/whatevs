@@ -1,14 +1,12 @@
 package server;
 
 import com.google.gson.Gson;
-import common.ClientMovementRequest;
-import common.MapData;
+import tiles.Tile;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class Server {
     public static void main(String[] args) throws Exception {
@@ -19,72 +17,49 @@ public class Server {
                 ServerSocket ss = new ServerSocket(port)
         ) {
             Gson gson = new Gson();
-
             Random rand = new Random();
+            BlockingQueue<Boolean> areFinished = new ArrayBlockingQueue<>(4);
+
             int size = 16;
             Tile[][] map = Map.generateMap(size);
-            String[][] mapString = new String[size][size];
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    mapString[i][j] = map[i][j].toString();
-                }
+            System.out.println("Map generated!");
+
+            //generate x and y for players
+            int[][] locations = generateLocations(4, size, rand);
+            System.out.println("Set spawn locations for 4 players.");
+
+            System.out.println("Waiting for clients...");
+            List<Thread> threads = new ArrayList<>();
+            while (threads.size() != 4) {
+                Thread clientThread = new Thread(new ClientHandler(ss.accept(), gson, map,
+                        locations[threads.size()][0],
+                        locations[threads.size()][1],
+                        areFinished
+                ));
+                threads.add(clientThread);
+                clientThread.start();
             }
-            System.out.println("Map generated.\nWaiting for clients...");
 
-            Socket clientSocket = ss.accept();
-            System.out.println("Client received! Id: " + clientSocket.toString());
-            DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
-            DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+            System.out.println("No longer accepting more clients");
 
-            dos.writeUTF(gson.toJson(new MapData(mapString)));
-            System.out.println("Sent mapString.");
+            //start waiting for input and output if turn is finished or not
+            //also process chat
+        }
+    }
 
-            int y = rand.nextInt(map[0].length);
-            Player player = new Player(0,y);
-            dos.writeUTF(gson.toJson(player));
-            List<String> availableDirections = processMap(map, 0, y);
-            dos.writeUTF(gson.toJson(new ClientMovementRequest(availableDirections)));
-            while (clientSocket.isConnected()) {
-                roundStart(gson, map, rand, dos, dis);
-                //int f = dis.readInt();
-                //processAllInput(f, dis.readUTF());
+    private static int[][] generateLocations(int playerCount, int mapSize, Random rand) {
+        int[][] locations = new int[playerCount][2];
+        for (int i = 0; i < playerCount; i++) {
+            if (i % 2 == 0) {
+                locations[i][0] = (i == 0) ? 0 : mapSize - 1;
+                locations[i][1] = rand.nextInt(mapSize);
+            }else{
+                locations[i][0] = rand.nextInt(mapSize);
+                locations[i][1] = (i == 1) ? 0: mapSize - 1;
             }
-            dis.close();
-            dos.close();
+
         }
-    }
-
-    private static void processAllInput(int id, String json, HashMap<Integer, Class<?>> inputTypes){
-
-    }
-
-    private static void processTextInput(String str, DataOutputStream dos) throws Exception {
-        dos.writeUTF("[Client]: " + str);
-    }
-
-    private static void roundStart(Gson gson, Tile[][] map, Random rand, DataOutputStream dos, DataInputStream dis) throws Exception {
-        //just to start things off, going to need a way for tracking player location
-        dos.writeUTF(gson.toJson(new Player(0, 2)));
-        List<String> availableDirections = processMap(map, 0, 2);
-        dos.writeUTF(gson.toJson(new ClientMovementRequest(availableDirections)));
-        dis.readUTF();
-
-    }
-
-    private static List<String> processMap(Tile[][] map, int x, int y) {
-        List<String> directions = new ArrayList<>();
-        if (x > 0) {
-            directions.add("left");
-        }
-        if (x < 16) {
-            directions.add("right");
-        }
-        if (y > 0) {
-            directions.add("up");
-        }
-        if (y < 16) {
-            directions.add("down");
-        }
-        return directions;
+        System.out.println(Arrays.toString(locations[0]));
+        return locations;
     }
 }

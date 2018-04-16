@@ -1,4 +1,7 @@
-package server;
+package tiles;
+
+import server.Player;
+import tiles.Tile;
 
 public class TrashedArea implements Tile {
     @Override

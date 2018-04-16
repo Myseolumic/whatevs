@@ -1,4 +1,6 @@
-package server;
+package tiles;
+
+import server.Player;
 
 public interface Tile {
     void enteredTile(Player player);

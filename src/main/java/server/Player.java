@@ -1,7 +1,5 @@
 package server;
 
-import server.Moveable;
-
 public class Player implements Moveable {
 
     private int x,y;

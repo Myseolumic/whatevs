@@ -1,4 +1,6 @@
-package server;
+package tiles;
+
+import server.Player;
 
 public class Dark implements Tile {
     @Override
