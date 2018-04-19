@@ -30,10 +30,6 @@ public class Main extends Application {
         map.setMinHeight(640);
         map.setMinWidth(640);
         BorderPane topRight = new BorderPane();
-        Tile[][] miniMap = Map.generateMap(16);
-        //Map.reduceMapSize(miniMap);
-        Moveable[][] characters = Map.generatePlayersAndAI(miniMap, 4);
-        Map.visualizeMap(map, miniMap);
 
         HBox inventory = new HBox();
         Rectangle inventor_1 = new Rectangle(80,80, Color.GREEN);
