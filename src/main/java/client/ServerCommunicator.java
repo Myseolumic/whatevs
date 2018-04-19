@@ -27,6 +27,7 @@ public class ServerCommunicator implements Runnable {
     private Player location;
     private DataInputStream dis;
     private DataOutputStream dos;
+    private volatile boolean running = true;
 
     public ServerCommunicator(GridPane mapArea, TextArea textArea, TextField textField, Buttons buttons) throws Exception {
         this.serverSocket = new Socket("127.0.0.1", 1337);
@@ -53,9 +54,7 @@ public class ServerCommunicator implements Runnable {
         try {
             Gson gson = new Gson();
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
-            Tile[][] blackTiles = Map.generateFogMap(mapTiles.length);
-            int[][] cord
-            Map.visualizeMap(mapArea, mapTiles, blackTiles);
+            boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
             Direction direction = new Direction();
             buttons.init(textArea, direction);
             textField.setOnKeyPressed(event -> {
@@ -71,14 +70,19 @@ public class ServerCommunicator implements Runnable {
                 }
             });
 
-            while (true) {
+            while (running) {
                 location = gson.fromJson(dis.readUTF(), Player.class);
+                cordMatrix[location.getX()][location.getY()] = true;
+                Map.visualizeMap(mapArea, mapTiles, cordMatrix);
                 Map.placePlayer(mapArea, location);
                 System.out.println("X:" + location.getX() + " Y.:" + location.getY());
                 List<String> availableDirections = gson.fromJson(dis.readUTF(), ClientMovementRequest.class).getDirections();
                 updateButtons(availableDirections);
                 //waits turn to end.
                 Thread.sleep(10000);
+                if(!running){
+                    break;
+                }
                 textArea.appendText("Turn is over.\n");
 
                 System.out.println(direction.getDirection());
@@ -90,6 +94,9 @@ public class ServerCommunicator implements Runnable {
         }
     }
 
+    public void stopRunning(){
+        this.running = false;
+    }
     private void updateButtons(List<String> directions) {
         buttons.enableAll();
         System.out.println(directions.toString());

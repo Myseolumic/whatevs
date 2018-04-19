@@ -73,7 +73,7 @@ public class ClientHandler implements Runnable {
             System.out.println("[Client]: "+str);
         }
         if(id == 1){ //movement
-            if(str == null){
+            if(str == "stop"){
                 System.out.println("Client didn't move.");
                 return;
             }
@@ -106,17 +106,19 @@ public class ClientHandler implements Runnable {
     }
 
     private static List<String> processMap(Tile[][] map, Player player) {
+        System.out.println(player.getX());
+        System.out.println(player.getY());
         List<String> directions = new ArrayList<>();
         if (player.getX() > 0) {
             directions.add("left");
         }
-        if (player.getX() < 16) {
+        if (player.getX() < 15) {
             directions.add("right");
         }
         if (player.getY() > 0) {
             directions.add("up");
         }
-        if (player.getY() < 16) {
+        if (player.getY() < 15) {
             directions.add("down");
         }
         return directions;

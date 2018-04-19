@@ -68,9 +68,11 @@ public class Main extends Application {
 
         //insert all needed IO/other Threads
         ServerCommunicator comm;
+        Thread ioThread;
         try{
             comm = new ServerCommunicator(map,textArea,textField, buttons);
-            new Thread(comm).start();
+            ioThread = new Thread(comm);
+            ioThread.start();
         } catch (ConnectException e){
             System.err.println("Server is not running!\nExiting game...");
             Platform.exit();
@@ -80,6 +82,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(event -> {
             try{
                 comm.close();
+                comm.stopRunning();
             }catch (IOException e){
                 throw new RuntimeException(e);
             }

@@ -9,22 +9,26 @@ import tiles.*;
 
 public class Map {
 
-    public static void visualizeMap(GridPane map, Tile[][] miniMap, Tile[][] fogMap) {
+    public static void visualizeMap(GridPane map, Tile[][] miniMap, boolean[][] cordMatrix) {
         Platform.runLater(() -> {
             for (int i = 0; i < miniMap.length; i++) {
                 for (int j = 0; j < miniMap.length; j++) {
-                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream(miniMap[i][j].getResourcePath()))), i, j);
-                    map.add(new ImageView(new Image(new Dark().getResourcePath())), i,j);
+                    if (cordMatrix[i][j]) {
+                        map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream(miniMap[i][j].getResourcePath()))), i, j);
+                    } else {
+                        map.add(new ImageView(new Image(new Dark().getResourcePath())), i, j);
+                    }
                 }
             }
         });
     }
 
-    public static void placePlayer(GridPane map, Player location){
+    public static void placePlayer(GridPane map, Player location) {
         Platform.runLater(() -> {
             map.add(new ImageView(new Image(location.getResourcePath())), location.getX(), location.getY());
         });
     }
+
     public static Tile[][] stringToTiles(String[][] miniMap) {
         int size = miniMap.length;
         Tile[][] mapTiles = new Tile[size][size];
@@ -37,8 +41,8 @@ public class Map {
     }
 
 
-    public static Tile stringToTile(String tileName){
-        switch (tileName){
+    public static Tile stringToTile(String tileName) {
+        switch (tileName) {
             case "DarkTile":
                 return new Dark();
             case "HouseTile":
@@ -55,11 +59,11 @@ public class Map {
         return null;
     }
 
-    public static Tile[][] generateFogMap(int size) {
-        Tile[][] map= new Tile[size][size];
+    public static boolean[][] generateBoolMatrix(int size) {
+        boolean[][] map = new boolean[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                map[i][j] = new Dark();
+                map[i][j] = false;
             }
         }
         return map;
