@@ -1,13 +1,10 @@
-package main;
+package client;
 
 import com.google.gson.Gson;
 import common.ClientMovementRequest;
 import common.MapData;
-import javafx.event.EventHandler;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import server.Player;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -27,29 +24,32 @@ public class ServerCommunicator implements Runnable {
     private TextField textField;
     private Buttons buttons;
     private Player location;
+    private DataInputStream dis;
+    private DataOutputStream dos;
 
     public ServerCommunicator(GridPane mapArea, TextArea textArea, TextField textField, Buttons buttons) throws Exception {
-        serverSocket = new Socket("127.0.0.1", 1337);
+        this.serverSocket = new Socket("127.0.0.1", 1337);
+        this.dis = new DataInputStream(serverSocket.getInputStream());
+        this.dos = new DataOutputStream(serverSocket.getOutputStream());
+
         this.mapArea = mapArea;
         this.textArea = textArea;
         this.textField = textField;
         this.buttons = buttons;
     }
 
-    public void close() {
-        try {
-            serverSocket.close();
-        } catch (Exception e) {
-
-        }
+    public void close() throws IOException {
+        dos.writeInt(404);
+        dos.writeUTF("Client ragequit.");
+        dis.close();
+        dos.close();
+        serverSocket.close();
+        Platform.exit();
     }
 
     @Override
     public void run() {
-        try (
-                DataInputStream dis = new DataInputStream(serverSocket.getInputStream());
-                DataOutputStream dos = new DataOutputStream(serverSocket.getOutputStream())
-        ) {
+        try {
             Gson gson = new Gson();
             Map.visualizeMap(mapArea, gson.fromJson(dis.readUTF(), MapData.class).getMapTiles());
             Direction direction = new Direction();

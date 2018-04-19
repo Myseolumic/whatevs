@@ -1,4 +1,4 @@
-package main;
+package client;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;

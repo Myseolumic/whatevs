@@ -1,10 +1,10 @@
-package main;
+package client;
 
 public class Direction {
     private String direction;
 
     public Direction(){
-        direction = "";
+        direction = null;
     }
 
     public void setDirection(String direction){

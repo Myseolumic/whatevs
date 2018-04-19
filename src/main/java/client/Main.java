@@ -1,6 +1,7 @@
-package main;
+package client;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -14,6 +15,9 @@ import javafx.stage.Stage;
 import server.Map;
 import server.Moveable;
 import tiles.Tile;
+
+import java.io.IOException;
+import java.net.ConnectException;
 
 public class Main extends Application {
 
@@ -67,10 +71,24 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(client));
 
         //insert all needed IO/other Threads
-        ServerCommunicator comm = new ServerCommunicator(map,textArea,textField, buttons);
-        new Thread(comm).start();
+        ServerCommunicator comm;
+        try{
+            comm = new ServerCommunicator(map,textArea,textField, buttons);
+            new Thread(comm).start();
+        } catch (ConnectException e){
+            System.err.println("Server is not running!\nExiting game...");
+            Platform.exit();
+            return; // comm.close() viskab näkku muidu
+        }
 
-        primaryStage.setOnCloseRequest(event -> comm.close());
+        primaryStage.setOnCloseRequest(event -> {
+            try{
+                comm.close();
+            }catch (IOException e){
+                throw new RuntimeException(e);
+            }
+        });
+        Platform.setImplicitExit(true);
         primaryStage.show();
     }
 

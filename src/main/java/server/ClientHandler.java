@@ -7,36 +7,43 @@ import tiles.Tile;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 
 public class ClientHandler implements Runnable {
 
     private Socket clientSocket;
     private BlockingQueue<Boolean> turnFinished;
+    private BlockingQueue<Player> playerLocation;
     private Gson gson;
-    private Random random;
     private Tile[][] map;
-    private int x,y;
+    private Player location;
+    private DataInputStream dis;
+    private DataOutputStream dos;
+    private boolean clientDisconnected;
 
-    public ClientHandler(Socket clientSocket, Gson gson, Tile[][] map, int x, int y, BlockingQueue<Boolean> turnFinished) {
+    public ClientHandler(Socket clientSocket, Gson gson, Tile[][] map, Player location,
+                         BlockingQueue<Boolean> turnFinished,
+                         BlockingQueue<Player> playerLocation
+    ) throws IOException{
         this.clientSocket = clientSocket;
+        this.dis = new DataInputStream(clientSocket.getInputStream());
+        this.dos = new DataOutputStream(clientSocket.getOutputStream());
+
         this.gson = gson;
         this.map = map;
+        this.clientDisconnected = false;
         this.turnFinished = turnFinished;
-        this.x = x;
-        this.y = y;
+        this.playerLocation = playerLocation;
+        this.location = location;
     }
 
     @Override
     public void run() {
-        try (
-                DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
-                DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream())
-        ) {
+        try {
             System.out.println("Client received! Id: " + clientSocket.toString());
             int size = map.length;
             String[][] mapString = new String[size][size];
@@ -49,10 +56,9 @@ public class ClientHandler implements Runnable {
             dos.writeUTF(gson.toJson(new MapData(mapString)));
             System.out.println("Sent mapString.");
 
-            while (clientSocket.isConnected()) {
-                Player player = new Player(x, y);
-                dos.writeUTF(gson.toJson(player));
-                List<String> availableDirections = processMap(map, x, y);
+            while (!clientDisconnected) {
+                dos.writeUTF(gson.toJson(location));
+                List<String> availableDirections = processMap(map,location);
                 dos.writeUTF(gson.toJson(new ClientMovementRequest(availableDirections)));
                 processInput(dis.readInt(), dis.readUTF());
             }
@@ -62,39 +68,50 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void processInput(int id, String str){
+    private void processInput(int id, String str) throws IOException{
         if(id == 0){ //text
             System.out.println("[Client]: "+str);
         }
         if(id == 1){ //movement
             System.out.println("client is being moved "+str);
             if(str.equals("up")){
-                y--;
+                location.modY(-1);
             }
             if(str.equals("down")){
-                y++;
+                location.modY(1);
             }
             if(str.equals("right")){
-                x++;
+                location.modX(1);
             }
             if(str.equals("left")){
-                x--;
+                location.modX(-1);
             }
+        }
+        if(id == 404){
+            System.out.println(str);
+            this.close();
         }
     }
 
-    private static List<String> processMap(Tile[][] map, int x, int y) {
+    private void close() throws IOException{
+        clientDisconnected = true;
+        dos.close();
+        dis.close();
+        clientSocket.close();
+    }
+
+    private static List<String> processMap(Tile[][] map, Player player) {
         List<String> directions = new ArrayList<>();
-        if (x > 0) {
+        if (player.getX() > 0) {
             directions.add("left");
         }
-        if (x < 16) {
+        if (player.getX() < 16) {
             directions.add("right");
         }
-        if (y > 0) {
+        if (player.getY() > 0) {
             directions.add("up");
         }
-        if (y < 16) {
+        if (player.getY() < 16) {
             directions.add("down");
         }
         return directions;

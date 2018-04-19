@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import javafx.application.Platform;
 import tiles.Tile;
 
 import java.net.ServerSocket;
@@ -19,23 +20,24 @@ public class Server {
             Gson gson = new Gson();
             Random rand = new Random();
             BlockingQueue<Boolean> areFinished = new ArrayBlockingQueue<>(4);
+            BlockingQueue<Player> locations = new ArrayBlockingQueue<>(4);
 
             int size = 16;
             Tile[][] map = Map.generateMap(size);
             System.out.println("Map generated!");
 
             //generate x and y for players
-            int[][] locations = generateLocations(4, size, rand);
+            int[][] spawnLocations = generateLocations(4, size, rand);
             System.out.println("Set spawn locations for 4 players.");
 
             System.out.println("Waiting for clients...");
             List<Thread> threads = new ArrayList<>();
             while (threads.size() != 4) {
-                Thread clientThread = new Thread(new ClientHandler(ss.accept(), gson, map,
-                        locations[threads.size()][0],
-                        locations[threads.size()][1],
-                        areFinished
-                ));
+                Player player = new Player(threads.size(),
+                        spawnLocations[threads.size()][0],
+                        spawnLocations[threads.size()][1]);
+
+                Thread clientThread = new Thread(new ClientHandler(ss.accept(), gson, map, player, areFinished, locations));
                 threads.add(clientThread);
                 clientThread.start();
             }

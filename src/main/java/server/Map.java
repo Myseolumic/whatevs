@@ -4,7 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import main.Main;
+import client.Main;
 import tiles.*;
 
 public class Map {
@@ -73,7 +73,7 @@ public class Map {
             int x = (int) Math.floor(Math.random() * size);
             int y = (int) Math.floor(Math.random() * size);
             if (tilemap[x][y] instanceof Tree && objectList[x][y] == null) {
-                objectList[x][y] = new Player(x,y);
+                //objectList[x][y] = ;
                 playersOnMap += 1;
             }
         }
