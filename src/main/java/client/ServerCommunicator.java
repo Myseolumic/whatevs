@@ -57,6 +57,7 @@ public class ServerCommunicator implements Runnable {
             boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
             Direction direction = new Direction();
             buttons.init(textArea, direction);
+            int turn = 0;
             textField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
@@ -71,6 +72,11 @@ public class ServerCommunicator implements Runnable {
             });
 
             while (running) {
+                /*turn+=1;
+                if(turn%5 == 0) {
+                    mapTiles = Map.reduceMapSize(mapTiles);
+                }*/
+                direction.setDirection("stop");
                 location = gson.fromJson(dis.readUTF(), Player.class);
                 cordMatrix[location.getX()][location.getY()] = true;
                 Map.visualizeMap(mapArea, mapTiles, cordMatrix);
