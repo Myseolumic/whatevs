@@ -10,6 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import server.Map;
+import tiles.Tile;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -51,7 +52,10 @@ public class ServerCommunicator implements Runnable {
     public void run() {
         try {
             Gson gson = new Gson();
-            Map.visualizeMap(mapArea, gson.fromJson(dis.readUTF(), MapData.class).getMapTiles());
+            Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
+            Tile[][] blackTiles = Map.generateFogMap(mapTiles.length);
+            int[][] cord
+            Map.visualizeMap(mapArea, mapTiles, blackTiles);
             Direction direction = new Direction();
             buttons.init(textArea, direction);
             textField.setOnKeyPressed(event -> {
