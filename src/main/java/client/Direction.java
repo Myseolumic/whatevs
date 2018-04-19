@@ -4,7 +4,7 @@ public class Direction {
     private String direction;
 
     public Direction(){
-        direction = null;
+        direction = "stop";
     }
 
     public void setDirection(String direction){
