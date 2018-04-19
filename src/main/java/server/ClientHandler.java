@@ -73,6 +73,10 @@ public class ClientHandler implements Runnable {
             System.out.println("[Client]: "+str);
         }
         if(id == 1){ //movement
+            if(str == null){
+                System.out.println("Client didn't move.");
+                return;
+            }
             System.out.println("client is being moved "+str);
             if(str.equals("up")){
                 location.modY(-1);
@@ -86,6 +90,7 @@ public class ClientHandler implements Runnable {
             if(str.equals("left")){
                 location.modX(-1);
             }
+
         }
         if(id == 404){
             System.out.println(str);
