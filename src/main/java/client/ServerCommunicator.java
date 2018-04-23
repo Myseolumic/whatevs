@@ -85,7 +85,13 @@ public class ServerCommunicator implements Runnable {
                 List<String> availableDirections = gson.fromJson(dis.readUTF(), ClientMovementRequest.class).getDirections();
                 updateButtons(availableDirections);
                 //waits turn to end.
-                Thread.sleep(10000);
+                Thread.sleep(7000);
+                textArea.appendText("3...\n");
+                Thread.sleep(1000);
+                textArea.appendText("2...\n");
+                Thread.sleep(1000);
+                textArea.appendText("1...\n");
+                Thread.sleep(1000);
                 if(!running){
                     break;
                 }
