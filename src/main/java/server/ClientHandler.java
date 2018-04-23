@@ -12,12 +12,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 
 public class ClientHandler implements Runnable {
 
     private Socket clientSocket;
     private BlockingQueue<Boolean> turnFinished;
     private BlockingQueue<Player> playerLocation;
+    private CountDownLatch cdl;
     private Gson gson;
     private Tile[][] map;
     private Player location;
@@ -27,7 +29,8 @@ public class ClientHandler implements Runnable {
 
     public ClientHandler(Socket clientSocket, Gson gson, Tile[][] map, Player location,
                          BlockingQueue<Boolean> turnFinished,
-                         BlockingQueue<Player> playerLocation
+                         BlockingQueue<Player> playerLocation,
+                         CountDownLatch cdl
     ) throws IOException{
         this.clientSocket = clientSocket;
         this.dis = new DataInputStream(clientSocket.getInputStream());
@@ -38,6 +41,7 @@ public class ClientHandler implements Runnable {
         this.clientDisconnected = false;
         this.turnFinished = turnFinished;
         this.playerLocation = playerLocation;
+        this.cdl = cdl;
         this.location = location;
     }
 
@@ -55,7 +59,7 @@ public class ClientHandler implements Runnable {
 
             dos.writeUTF(gson.toJson(new MapData(mapString)));
             System.out.println("Sent mapString.");
-
+            cdl.await();
             while (!clientDisconnected) {
                 dos.writeUTF(gson.toJson(location));
                 List<String> availableDirections = processMap(map,location);
@@ -106,8 +110,6 @@ public class ClientHandler implements Runnable {
     }
 
     private static List<String> processMap(Tile[][] map, Player player) {
-        System.out.println(player.getX());
-        System.out.println(player.getY());
         List<String> directions = new ArrayList<>();
         if (player.getX() > 0) {
             directions.add("left");

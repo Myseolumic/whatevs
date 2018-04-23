@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 
 public class Server {
     public static void main(String[] args) throws Exception {
@@ -21,6 +22,7 @@ public class Server {
             Random rand = new Random();
             BlockingQueue<Boolean> areFinished = new ArrayBlockingQueue<>(4);
             BlockingQueue<Player> locations = new ArrayBlockingQueue<>(4);
+            CountDownLatch cdl = new CountDownLatch(1);
 
             int size = 16;
             Tile[][] map = Map.generateMap(size);
@@ -37,15 +39,17 @@ public class Server {
                         spawnLocations[threads.size()][0],
                         spawnLocations[threads.size()][1]);
 
-                Thread clientThread = new Thread(new ClientHandler(ss.accept(), gson, map, player, areFinished, locations));
+                Thread clientThread = new Thread(new ClientHandler(ss.accept(), gson, map, player, areFinished, locations, cdl));
                 threads.add(clientThread);
                 clientThread.start();
             }
-
+            cdl.countDown();
             System.out.println("No longer accepting more clients");
 
-            //start waiting for input and output if turn is finished or not
-            //also process chat
+            while(true){
+                //start waiting for input and output if turn is finished or not
+                //also process chat
+            }
         }
     }
 
