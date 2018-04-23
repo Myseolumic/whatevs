@@ -54,9 +54,10 @@ public class ServerCommunicator implements Runnable {
         try {
             Gson gson = new Gson();
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
-            Map.visualizeMap(mapArea, mapTiles);
+            boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
             Direction direction = new Direction();
             buttons.init(textArea, direction);
+            int turn = 0;
             textField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
@@ -71,13 +72,26 @@ public class ServerCommunicator implements Runnable {
             });
 
             while (running) {
+                /*turn+=1;
+                if(turn%5 == 0) {
+                    mapTiles = Map.reduceMapSize(mapTiles);
+                }*/
+                direction.setDirection("stop");
                 location = gson.fromJson(dis.readUTF(), Player.class);
+                cordMatrix[location.getX()][location.getY()] = true;
+                Map.visualizeMap(mapArea, mapTiles, cordMatrix);
                 Map.placePlayer(mapArea, location);
                 System.out.println("X:" + location.getX() + " Y.:" + location.getY());
                 List<String> availableDirections = gson.fromJson(dis.readUTF(), ClientMovementRequest.class).getDirections();
                 updateButtons(availableDirections);
                 //waits turn to end.
-                Thread.sleep(10000);
+                Thread.sleep(7000);
+                textArea.appendText("3...\n");
+                Thread.sleep(1000);
+                textArea.appendText("2...\n");
+                Thread.sleep(1000);
+                textArea.appendText("1...\n");
+                Thread.sleep(1000);
                 if(!running){
                     break;
                 }

@@ -9,21 +9,26 @@ import tiles.*;
 
 public class Map {
 
-    public static void visualizeMap(GridPane map, Tile[][] miniMap) {
+    public static void visualizeMap(GridPane map, Tile[][] miniMap, boolean[][] cordMatrix) {
         Platform.runLater(() -> {
             for (int i = 0; i < miniMap.length; i++) {
                 for (int j = 0; j < miniMap.length; j++) {
-                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream(miniMap[i][j].getResourcePath()))), i, j);
+                    if (cordMatrix[i][j]) {
+                        map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream(miniMap[i][j].getResourcePath()))), i, j);
+                    } else {
+                        map.add(new ImageView(new Image(new Dark().getResourcePath())), i, j);
+                    }
                 }
             }
         });
     }
 
-    public static void placePlayer(GridPane map, Player location){
+    public static void placePlayer(GridPane map, Player location) {
         Platform.runLater(() -> {
             map.add(new ImageView(new Image(location.getResourcePath())), location.getX(), location.getY());
         });
     }
+
     public static Tile[][] stringToTiles(String[][] miniMap) {
         int size = miniMap.length;
         Tile[][] mapTiles = new Tile[size][size];
@@ -35,52 +40,9 @@ public class Map {
         return mapTiles;
     }
 
-    public static void testVisualizeMap(GridPane map, Tile[][] miniMap, Moveable[][] characters) {
-        for (int i = 0; i < miniMap.length; i++) {
-            for (int j = 0; j < miniMap.length; j++) {
-                map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream(miniMap[i][j].getResourcePath()))), i, j);
-                if(characters[i][j] != null) {
-                    map.add(new ImageView(new Image(Main.class.getClassLoader().getResourceAsStream(characters[i][j].getResourcePath()))), i, j);
-                }
-            }
-        }
-    }
 
-    public static Moveable[][] generatePlayersAndAI(Tile[][] tilemap, int players) {
-        int size = tilemap.length;
-        Moveable[][] objectList = new Moveable[size][size];
-        placePlayers(tilemap, players, size, objectList);
-
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if(tilemap[i][j] instanceof Tree && objectList[i][j] == null) {
-                    double x = Math.random();
-                    if(x<0.1) {
-                        objectList[i][j] = new NatureLover();
-                    }
-                    if ((x>0.9)) {
-                        objectList[i][j] = new Hunter();
-                    }
-                }
-            }
-        }
-        return objectList;
-    }
-
-    private static void placePlayers(Tile[][] tilemap, int players, int size, Moveable[][] objectList) {
-        int playersOnMap = 0;
-        while (playersOnMap < players) {
-            int x = (int) Math.floor(Math.random() * size);
-            int y = (int) Math.floor(Math.random() * size);
-            if (tilemap[x][y] instanceof Tree && objectList[x][y] == null) {
-                //objectList[x][y] = ;
-                playersOnMap += 1;
-            }
-        }
-    }
-
-    public static Tile stringToTile(String tileName){
-        switch (tileName){
+    public static Tile stringToTile(String tileName) {
+        switch (tileName) {
             case "DarkTile":
                 return new Dark();
             case "HouseTile":
@@ -95,6 +57,16 @@ public class Map {
                 return new Chest();
         }
         return null;
+    }
+
+    public static boolean[][] generateBoolMatrix(int size) {
+        boolean[][] map = new boolean[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                map[i][j] = false;
+            }
+        }
+        return map;
     }
 
 
