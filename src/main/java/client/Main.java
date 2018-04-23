@@ -83,6 +83,7 @@ public class Main extends Application {
             try{
                 comm.close();
                 comm.stopRunning();
+                ioThread.interrupt();
             }catch (IOException e){
                 throw new RuntimeException(e);
             }
