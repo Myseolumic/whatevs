@@ -60,6 +60,7 @@ public class ServerCommunicator implements Runnable {
             int turn = 0;
             Map.visualizeMap(mapArea, mapTiles, cordMatrix);
 
+
             textField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     try {

@@ -58,14 +58,23 @@ public class Server {
                 while (finishedClients < players) {
                     boolean next = areFinished.take();
                     if (next) {
-                        System.out.println("nr: " + finishedClients);
                         //locations.take() -> boolmatrix
                         //later on attach socket id to player class or something similar for sending stuff
+                    } else {
+                        System.out.println("Removed the salty client.");
+                        players--;
                     }
                     finishedClients++;
                 }
+                if (players == 0){
+                    System.out.println("no more players, shutting down server.");
+                    break;
+                }
                 System.out.println("Released.");
                 semaphore.release(players);
+            }
+            for (Thread thread: threads){
+                if(thread.isAlive()) thread.interrupt();
             }
         }
     }

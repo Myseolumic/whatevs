@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import common.ClientMovementRequest;
 import common.MapData;
+import javafx.application.Platform;
 import tiles.Tile;
 
 import java.io.DataInputStream;
@@ -71,7 +72,8 @@ public class ClientHandler implements Runnable {
                 processInput(dis.readInt(), dis.readUTF());
                 semaphore.acquire(); //wait for other players to finish
             }
-
+        } catch (InterruptedException e){
+            System.err.println("Shutting down ClientHandler for port: "+clientSocket.getPort());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -104,6 +106,7 @@ public class ClientHandler implements Runnable {
         }
         if (id == 404) {
             System.out.println(str);
+            turnFinished.put(false);
             this.close();
         }
     }
@@ -113,6 +116,7 @@ public class ClientHandler implements Runnable {
         dos.close();
         dis.close();
         clientSocket.close();
+        Platform.exit();
     }
 
     private static List<String> processMap(Tile[][] map, Player player) {

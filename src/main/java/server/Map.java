@@ -11,6 +11,8 @@ public class Map {
 
     public static void visualizeMap(GridPane map, Tile[][] miniMap, boolean[][] cordMatrix) {
         Platform.runLater(() -> {
+            map.getChildren().clear();
+
             for (int i = 0; i < miniMap.length; i++) {
                 for (int j = 0; j < miniMap.length; j++) {
                     if (cordMatrix[i][j]) {
