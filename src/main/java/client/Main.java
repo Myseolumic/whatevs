@@ -12,9 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import server.Map;
-import server.Moveable;
-import tiles.Tile;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -32,13 +29,13 @@ public class Main extends Application {
         BorderPane topRight = new BorderPane();
 
         HBox inventory = new HBox();
-        Rectangle inventor_1 = new Rectangle(80,80, Color.GREEN);
-        Rectangle inventor_2 = new Rectangle(80,80, Color.BLUEVIOLET);
-        Rectangle inventor_3 = new Rectangle(80,80, Color.BROWN);
-        Rectangle inventor_4 = new Rectangle(80,80, Color.KHAKI);
-        inventory.getChildren().addAll(inventor_1,inventor_2,inventor_3,inventor_4);
+        Rectangle inventor_1 = new Rectangle(80, 80, Color.GREEN);
+        Rectangle inventor_2 = new Rectangle(80, 80, Color.BLUEVIOLET);
+        Rectangle inventor_3 = new Rectangle(80, 80, Color.BROWN);
+        Rectangle inventor_4 = new Rectangle(80, 80, Color.KHAKI);
+        inventory.getChildren().addAll(inventor_1, inventor_2, inventor_3, inventor_4);
         topRight.setBottom(inventory);
-        topSection.getChildren().addAll(map,topRight);
+        topSection.getChildren().addAll(map, topRight);
 
         TextArea textArea = new TextArea();
         TextField textField = new TextField();
@@ -52,14 +49,16 @@ public class Main extends Application {
         Button right = new Button("RIGHT");
         Button up = new Button("UP");
         Button down = new Button("DOWN");
-        Buttons buttons = new Buttons(up,down,left,right);
-        midRight.add(up,1,0);
-        midRight.add(left,0,1);
-        midRight.add(right,2,1);
+        Button stop = new Button("STOP");
+        Buttons buttons = new Buttons(up, down, left, right, stop);
+        midRight.add(up, 1, 0);
+        midRight.add(left, 0, 1);
+        midRight.add(stop, 1, 1);
+        midRight.add(right, 2, 1);
         midRight.add(down, 1, 2);
 
         HBox middleSection = new HBox();
-        middleSection.getChildren().addAll(midLeft,midRight);
+        middleSection.getChildren().addAll(midLeft, midRight);
 
         client.setTop(topSection);
         client.setCenter(middleSection);
@@ -69,30 +68,28 @@ public class Main extends Application {
         //insert all needed IO/other Threads
         ServerCommunicator comm;
         Thread ioThread;
-        try{
-            comm = new ServerCommunicator(map,textArea,textField, buttons);
+        try {
+            comm = new ServerCommunicator(map, textArea, textField, buttons);
             ioThread = new Thread(comm);
             ioThread.start();
-        } catch (ConnectException e){
+        } catch (ConnectException e) {
             System.err.println("Server is not running!\nExiting game...");
             Platform.exit();
             return; // comm.close() viskab näkku muidu
         }
 
         primaryStage.setOnCloseRequest(event -> {
-            try{
+            try {
                 comm.close();
                 comm.stopRunning();
                 ioThread.interrupt();
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
         Platform.setImplicitExit(true);
         primaryStage.show();
     }
-
-
 
 
     public static void main(String[] args) {

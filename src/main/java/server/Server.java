@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 
 public class Server {
     public static void main(String[] args) throws Exception {
@@ -20,35 +21,51 @@ public class Server {
         ) {
             Gson gson = new Gson();
             Random rand = new Random();
+
+            //java.util.concurrent stuff
             BlockingQueue<Boolean> areFinished = new ArrayBlockingQueue<>(4);
             BlockingQueue<Player> locations = new ArrayBlockingQueue<>(4);
             CountDownLatch cdl = new CountDownLatch(1);
+            Semaphore semaphore = new Semaphore(0, true);
 
+            //map related generation
             int size = 16;
             Tile[][] map = Map.generateMap(size);
+            boolean[][] usedTiles = Map.generateBoolMatrix(size);
             System.out.println("Map generated!");
 
             //generate x and y for players
-            int[][] spawnLocations = generateLocations(4, size, rand);
+            int players = 4;
+            int[][] spawnLocations = generateLocations(players, size, rand);
             System.out.println("Set spawn locations for 4 players.");
 
             System.out.println("Waiting for clients...");
             List<Thread> threads = new ArrayList<>();
-            while (threads.size() != 4) {
+            while (threads.size() != players) {
                 Player player = new Player(threads.size(),
                         spawnLocations[threads.size()][0],
                         spawnLocations[threads.size()][1]);
 
-                Thread clientThread = new Thread(new ClientHandler(ss.accept(), gson, map, player, areFinished, locations, cdl));
+                Thread clientThread = new Thread(new ClientHandler(ss.accept(), gson, map, player, areFinished, locations, cdl, semaphore));
                 threads.add(clientThread);
                 clientThread.start();
             }
             cdl.countDown();
             System.out.println("No longer accepting more clients");
 
-            while(true){
-                //start waiting for input and output if turn is finished or not
-                //also process chat
+            while (true) {
+                int finishedClients = 0;
+                while (finishedClients < players) {
+                    boolean next = areFinished.take();
+                    if (next) {
+                        System.out.println("nr: " + finishedClients);
+                        //locations.take() -> boolmatrix
+                        //later on attach socket id to player class or something similar for sending stuff
+                    }
+                    finishedClients++;
+                }
+                System.out.println("Released.");
+                semaphore.release(players);
             }
         }
     }
@@ -59,9 +76,9 @@ public class Server {
             if (i % 2 == 0) {
                 locations[i][0] = (i == 0) ? 0 : mapSize - 1;
                 locations[i][1] = rand.nextInt(mapSize);
-            }else{
+            } else {
                 locations[i][0] = rand.nextInt(mapSize);
-                locations[i][1] = (i == 1) ? 0: mapSize - 1;
+                locations[i][1] = (i == 1) ? 0 : mapSize - 1;
             }
 
         }
