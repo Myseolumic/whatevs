@@ -10,6 +10,7 @@ public class Chest implements Tile {
 
     @Override
     public void enteredTile(Player player) {
+        System.out.println(player.getName() + " entered chest area");
     }
 
     @Override

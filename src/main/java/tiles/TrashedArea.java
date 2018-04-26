@@ -1,7 +1,6 @@
 package tiles;
 
 import server.Player;
-import tiles.Tile;
 
 public class TrashedArea implements Tile {
     @Override
@@ -11,7 +10,7 @@ public class TrashedArea implements Tile {
 
     @Override
     public void enteredTile(Player player) {
-
+        System.out.println(player.getName() + " entered trashed area");
     }
 
     @Override

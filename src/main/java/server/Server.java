@@ -1,11 +1,13 @@
 package server;
 
 import com.google.gson.Gson;
-import javafx.application.Platform;
 import tiles.Tile;
 
 import java.net.ServerSocket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
@@ -42,8 +44,9 @@ public class Server {
                 Thread clientThread = new Thread(new ClientHandler(ss.accept(), gson, map, player, areFinished, locations, cdl));
                 threads.add(clientThread);
                 clientThread.start();
+                cdl.countDown();
             }
-            cdl.countDown();
+
             System.out.println("No longer accepting more clients");
 
             while(true){

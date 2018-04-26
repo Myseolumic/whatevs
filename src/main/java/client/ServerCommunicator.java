@@ -24,12 +24,13 @@ public class ServerCommunicator implements Runnable {
     private TextArea textArea;
     private TextField textField;
     private Buttons buttons;
-    private Player location;
+    private Labels labels;
+    private Player player;
     private DataInputStream dis;
     private DataOutputStream dos;
     private volatile boolean running = true;
 
-    public ServerCommunicator(GridPane mapArea, TextArea textArea, TextField textField, Buttons buttons) throws Exception {
+    public ServerCommunicator(GridPane mapArea, TextArea textArea, TextField textField, Buttons buttons, Labels labels) throws Exception {
         this.serverSocket = new Socket("127.0.0.1", 1337);
         this.dis = new DataInputStream(serverSocket.getInputStream());
         this.dos = new DataOutputStream(serverSocket.getOutputStream());
@@ -38,6 +39,7 @@ public class ServerCommunicator implements Runnable {
         this.textArea = textArea;
         this.textField = textField;
         this.buttons = buttons;
+        this.labels = labels;
     }
 
     public void close() throws IOException {
@@ -77,13 +79,16 @@ public class ServerCommunicator implements Runnable {
                     mapTiles = Map.reduceMapSize(mapTiles);
                 }*/
                 direction.setDirection("stop");
-                location = gson.fromJson(dis.readUTF(), Player.class);
-                cordMatrix[location.getX()][location.getY()] = true;
+                player = gson.fromJson(dis.readUTF(), Player.class);
+                labels.setCharacter(player.getName());
+                labels.setHp(String.valueOf(player.getHealth()));
+                cordMatrix[player.getX()][player.getY()] = true;
                 Map.visualizeMap(mapArea, mapTiles, cordMatrix);
-                Map.placePlayer(mapArea, location);
-                System.out.println("X:" + location.getX() + " Y.:" + location.getY());
+                Map.placePlayer(mapArea, player);
+                System.out.println("X:" + player.getX() + " Y.:" + player.getY());
                 List<String> availableDirections = gson.fromJson(dis.readUTF(), ClientMovementRequest.class).getDirections();
                 updateButtons(availableDirections);
+                mapTiles[player.getX()][player.getY()].enteredTile(player);
                 //waits turn to end.
                 Thread.sleep(7000);
                 textArea.appendText("3...\n");

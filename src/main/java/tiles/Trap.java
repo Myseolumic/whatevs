@@ -1,7 +1,6 @@
 package tiles;
 
 import server.Player;
-import tiles.Tile;
 
 public class Trap implements Tile {
     @Override
@@ -11,7 +10,7 @@ public class Trap implements Tile {
 
     @Override
     public void enteredTile(Player player) {
-
+        System.out.println(player.getName() + " Entered a Trap tile");
     }
 
     @Override

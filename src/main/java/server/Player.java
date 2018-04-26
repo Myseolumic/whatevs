@@ -4,11 +4,21 @@ public class Player implements Moveable {
 
     private final int id;
     private int x,y;
+    private int health = 20;
+    private String name = "jaanus";
 
     public Player(int id, int x, int y){
         this.id = id;
         this.x = x;
         this.y = y;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void modX(int value){

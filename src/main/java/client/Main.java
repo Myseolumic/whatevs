@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -12,9 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import server.Map;
-import server.Moveable;
-import tiles.Tile;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -47,6 +45,13 @@ public class Main extends Application {
         midLeft.setTop(textArea);
         midLeft.setCenter(textField);
 
+        Label characterBar = new Label();
+        Label hpBar = new Label();
+        Label damage = new Label();
+        Labels info = new Labels(characterBar, hpBar,damage);
+        topRight.setCenter(hpBar);
+
+
         GridPane midRight = new GridPane();
         Button left = new Button("LEFT");
         Button right = new Button("RIGHT");
@@ -70,7 +75,7 @@ public class Main extends Application {
         ServerCommunicator comm;
         Thread ioThread;
         try{
-            comm = new ServerCommunicator(map,textArea,textField, buttons);
+            comm = new ServerCommunicator(map,textArea,textField, buttons, info);
             ioThread = new Thread(comm);
             ioThread.start();
         } catch (ConnectException e){
