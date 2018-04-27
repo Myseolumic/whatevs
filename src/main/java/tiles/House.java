@@ -26,7 +26,7 @@ public class House implements Tile {
                     event = "You see Walmart bags in the corner. Found loot. "+ (roomsUnchecked-1) + " rooms unchecked.";
                     break;
                 case 3://nothing
-                    event = "Did not find anything this turn. " + (roomsUnchecked-1) + " rooms unchecked.";
+                    event = "Did not find anything from this room. " + (roomsUnchecked-1) + " rooms unchecked.";
                     break;
 
             }

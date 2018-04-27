@@ -3,13 +3,15 @@ package client;
 public class PlayerStats {
     private String name;
     private String animalClass;
+    private String portraitPath;
     private int health;
     private int maxHealth;
     private int dmg;
     private boolean isAlive = true;
 
 
-    public PlayerStats(String name, String animalClass, int Health, int dmg) {
+    public PlayerStats(String name, String animalClass,String portraitPath, int Health, int dmg) {
+        this.portraitPath = portraitPath;
         this.name = name;
         this.animalClass = animalClass;
         this.health = Health;
@@ -19,6 +21,10 @@ public class PlayerStats {
 
     public String getName() {
         return name;
+    }
+
+    public String getPortraitPath() {
+        return portraitPath;
     }
 
     public void setHealth(int health) {
