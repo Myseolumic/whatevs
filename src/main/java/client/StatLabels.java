@@ -5,11 +5,13 @@ import javafx.scene.control.Label;
 
 public class StatLabels {
 
-    Label name;
-    Label hp;
-    Label damage;
+    private String portraitPath;
+    private Label name;
+    private Label hp;
+    private Label damage;
 
-    public StatLabels(Label name, Label hp, Label damage) {
+    public StatLabels(Label name, Label hp, Label damage, String portraitPath) {
+        this.portraitPath = portraitPath;
         this.name = name;
         this.hp = hp;
         this.damage = damage;
@@ -18,7 +20,7 @@ public class StatLabels {
     public void setHp(String input, String maxhp, boolean isAlive) {
         Platform.runLater(
                 () -> {
-                    if(isAlive) {
+                    if (isAlive) {
                         this.hp.setText("Health: " + input + "/" + maxhp);
                     } else {
                         this.hp.setText("Health: DEAD");
@@ -37,5 +39,9 @@ public class StatLabels {
         Platform.runLater(
                 () -> this.damage.setText("Damage: " + input)
         );
+    }
+
+    public void setPortraitPath(String portraitPath) {
+        this.portraitPath = portraitPath;
     }
 }

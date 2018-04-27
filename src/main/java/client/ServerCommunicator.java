@@ -62,6 +62,7 @@ public class ServerCommunicator implements Runnable {
 
 
             PlayerStats stats = createStats("Jaanus");
+            statLabels.setPortraitPath(stats.getPortraitPath());
             statLabels.setName(stats.getName(), stats.getAnimalClass());
             statLabels.setDamage(String.valueOf(stats.getDmg()));
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
@@ -117,7 +118,7 @@ public class ServerCommunicator implements Runnable {
                 if (!running) {
                     break;
                 }
-                textArea.appendText("--------------------------------------------------\n");
+                textArea.appendText("--------------------------------------------------\n\n");
 
                 System.out.println(direction.getDirection());
                 dos.writeInt(1);
@@ -154,11 +155,13 @@ public class ServerCommunicator implements Runnable {
         List<String> classes = Arrays.asList("Hedgehog", "Giraffe", "Wolf");
         int damage=0;
         int health=0;
-        int randomClass = (int) Math.floor(Math.random()*classes.size());
+        String portraitPath = "";
+        int randomClass = 0; //(int) Math.floor(Math.random()*classes.size());
         switch(randomClass) {
             case 0:
                 damage = 5;
                 health = 14;
+                portraitPath = "TileSprites/hedgehog.png";
                 break;
             case 1:
                 damage = 4;
@@ -170,6 +173,6 @@ public class ServerCommunicator implements Runnable {
                 break;
         }
 
-        return new PlayerStats(name, classes.get(randomClass),health, damage);
+        return new PlayerStats(name, classes.get(randomClass),portraitPath,health, damage);
     }
 }

@@ -54,10 +54,15 @@ public class Main extends Application {
         Label name = new Label();
         Label hpBar = new Label();
         Label damage = new Label();
-        StatLabels info = new StatLabels(name, hpBar, damage);
+        String picturePath="TileSprites/hedgehog.png";
+        StatLabels info = new StatLabels(name, hpBar, damage, picturePath);
+        ImageView character = new ImageView(new Image(picturePath));
         VBox stats = new VBox();
+        GridPane statsAndPortrait = new GridPane();
         stats.getChildren().addAll(name, hpBar, damage);
-        topRight.setCenter(stats);
+        statsAndPortrait.add(character,0 ,0);
+        statsAndPortrait.add(stats,0,0);
+        topRight.setCenter(statsAndPortrait);
 
 
         GridPane midRight = new GridPane();
