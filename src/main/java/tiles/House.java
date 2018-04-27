@@ -1,6 +1,10 @@
 package tiles;
 
+import Invenoty.Item;
+import Invenoty.TestItem;
+import client.ItemList;
 import client.PlayerStats;
+import javafx.scene.layout.GridPane;
 
 public class House implements Tile {
 
@@ -12,7 +16,7 @@ public class House implements Tile {
     private boolean isActivated = false;
 
     @Override
-    public String enteredTile(PlayerStats player) {
+    public String enteredTile(PlayerStats player, ItemList itemList) {
         String event = "";
         if(!isActivated) {
             int randomEvent = (int) Math.ceil(Math.random() * 3);
@@ -22,7 +26,9 @@ public class House implements Tile {
                     event = "A shotgun triggered as you opened the door. Took 5 damage. "+ (roomsUnchecked-1) + " rooms unchecked.";
                     break;
                 case 2://loot
-                    //add random item to inventory
+                    Item loot = new TestItem();
+                    player.setDmg(player.getDmg()+ loot.getBonus());
+                    itemList.addItem(this,loot,itemList.getItemGridPane());
                     event = "You see Walmart bags in the corner. Found loot. "+ (roomsUnchecked-1) + " rooms unchecked.";
                     break;
                 case 3://nothing
@@ -53,5 +59,6 @@ public class House implements Tile {
             }
         }
     }
+
 
 }

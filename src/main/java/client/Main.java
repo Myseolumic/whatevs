@@ -1,5 +1,6 @@
 package client;
 
+import Invenoty.Item;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -30,14 +31,18 @@ public class Main extends Application {
         map.setMinWidth(640);
         BorderPane topRight = new BorderPane();
 
-        HBox inventory = new HBox();
+        GridPane inventory = new GridPane();
         ImageView inventor_1 = new ImageView(new Image("TileSprites/inventorySlot.png"));
         ImageView inventor_2 = new ImageView(new Image("TileSprites/inventorySlot.png"));
         ImageView inventor_3 = new ImageView(new Image("TileSprites/inventorySlot.png"));
         ImageView inventor_4 = new ImageView(new Image("TileSprites/inventorySlot.png"));
-        inventory.getChildren().addAll(inventor_1, inventor_2, inventor_3, inventor_4);
+        inventory.add(inventor_1,0,0);
+        inventory.add(inventor_2,1,0);
+        inventory.add(inventor_3,2,0);
+        inventory.add(inventor_4,3,0);
         topRight.setBottom(inventory);
         topSection.getChildren().addAll(map, topRight);
+        ItemList inventoryArray = new ItemList(inventory);
 
         TextArea textArea = new TextArea();
         TextField textField = new TextField();
@@ -80,7 +85,7 @@ public class Main extends Application {
         ServerCommunicator comm;
         Thread ioThread;
         try {
-            comm = new ServerCommunicator(map, textArea, textField, buttons, info);
+            comm = new ServerCommunicator(map, textArea, textField, buttons, info, inventoryArray);
             ioThread = new Thread(comm);
             ioThread.start();
         } catch (ConnectException e) {

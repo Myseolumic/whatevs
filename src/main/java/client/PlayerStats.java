@@ -24,8 +24,12 @@ public class PlayerStats {
     public void setHealth(int health) {
         this.health = health;
         if (this.health <= 0) {
-         isAlive = false;
+            isAlive = false;
         }
+    }
+
+    public void setDmg(int dmg) {
+        this.dmg = dmg;
     }
 
     public String getAnimalClass() {

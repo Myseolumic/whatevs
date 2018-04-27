@@ -34,6 +34,8 @@ public class StatLabels {
     }
 
     public void setDamage(String input) {
-        this.damage.setText("Damage: " + input);
+        Platform.runLater(
+                () -> this.damage.setText("Damage: " + input)
+        );
     }
 }

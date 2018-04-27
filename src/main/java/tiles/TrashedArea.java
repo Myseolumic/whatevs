@@ -1,6 +1,8 @@
 package tiles;
 
+import client.ItemList;
 import client.PlayerStats;
+import javafx.scene.layout.GridPane;
 
 public class TrashedArea implements Tile {
     @Override
@@ -9,7 +11,7 @@ public class TrashedArea implements Tile {
     }
 
     @Override
-    public String enteredTile(PlayerStats player) {
+    public String enteredTile(PlayerStats player, ItemList itemList) {
         player.setHealth(player.getHealth() - 5);
         return "You should not play with radioactive waste. Took 5 damage.";
     }

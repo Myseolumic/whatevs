@@ -1,6 +1,8 @@
 package tiles;
 
+import client.ItemList;
 import client.PlayerStats;
+import javafx.scene.layout.GridPane;
 
 public class Trap implements Tile {
     private boolean isActivated = false;
@@ -11,7 +13,7 @@ public class Trap implements Tile {
     }
 
     @Override
-    public String enteredTile(PlayerStats player) {
+    public String enteredTile(PlayerStats player, ItemList itemList ) {
         if (!isActivated) {
             player.setHealth(player.getHealth() - 5);
             return "You have stumbled upon a queer looking contraption. Took 5 damage.";

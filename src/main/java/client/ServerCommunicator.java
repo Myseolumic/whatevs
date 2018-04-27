@@ -1,5 +1,6 @@
 package client;
 
+import Invenoty.Item;
 import com.google.gson.Gson;
 import common.ClientMovementRequest;
 import common.MapData;
@@ -30,8 +31,10 @@ public class ServerCommunicator implements Runnable {
     private DataInputStream dis;
     private DataOutputStream dos;
     private volatile boolean running = true;
+    private ItemList itemslots;
 
-    public ServerCommunicator(GridPane mapArea, TextArea textArea, TextField textField, Buttons buttons, StatLabels statLabels) throws Exception {
+    public ServerCommunicator(GridPane mapArea, TextArea textArea, TextField textField, Buttons buttons, StatLabels statLabels, ItemList itemslots) throws Exception {
+        this.itemslots = itemslots;
         this.serverSocket = new Socket("127.0.0.1", 1337);
         this.dis = new DataInputStream(serverSocket.getInputStream());
         this.dos = new DataOutputStream(serverSocket.getOutputStream());
@@ -56,6 +59,7 @@ public class ServerCommunicator implements Runnable {
     public void run() {
         try {
             Gson gson = new Gson();
+
 
             PlayerStats stats = createStats("Jaanus");
             statLabels.setName(stats.getName(), stats.getAnimalClass());
@@ -89,10 +93,11 @@ public class ServerCommunicator implements Runnable {
                 player = gson.fromJson(dis.readUTF(), Player.class);
                 System.out.println("Your turn has started.");
                 Tile currentTile = mapTiles[player.getX()][player.getY()];
-                String eventInfo = currentTile.enteredTile(stats);
+                String eventInfo = currentTile.enteredTile(stats,itemslots);
                 textArea.appendText(eventInfo+"\n");
                 currentTile.Activate();
                 statLabels.setHp(String.valueOf(stats.getHealth()),String.valueOf(stats.getMaxHealth()),stats.isAlive());
+                statLabels.setDamage(String.valueOf(stats.getDmg()));
                 cordMatrix[player.getX()][player.getY()] = true;
                 Map.visualizeMap(mapArea, mapTiles, cordMatrix);
                 Map.placePlayer(mapArea, player);
