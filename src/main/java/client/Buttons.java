@@ -9,15 +9,17 @@ public class Buttons {
     private Button down;
     private Button left;
     private Button right;
+    private Button stop;
 
-    public Buttons(Button up, Button down, Button left, Button right) {
+    public Buttons(Button up, Button down, Button left, Button right, Button stop) {
         this.up = up;
         this.down = down;
         this.left = left;
         this.right = right;
+        this.stop = stop;
     }
 
-    public void init(TextArea target, Direction direction){
+    public void init(TextArea target, Direction direction) {
         up.setOnAction((ActionEvent event) -> {
             target.appendText("You will move North next turn.\n");
             direction.setDirection("up");
@@ -34,28 +36,32 @@ public class Buttons {
             target.appendText("You will move West next turn.\n");
             direction.setDirection("left");
         });
+        stop.setOnAction(event -> {
+            target.appendText("You will scout the area around you next turn.");
+            direction.setDirection("stop");
+        });
     }
 
-    public void enableAll(){
+    public void enableAll() {
         up.disableProperty().set(false);
         down.disableProperty().set(false);
         left.disableProperty().set(false);
         right.disableProperty().set(false);
     }
 
-    public void disableUp(){
+    public void disableUp() {
         up.disableProperty().set(true);
     }
 
-    public void disableDown(){
+    public void disableDown() {
         down.disableProperty().set(true);
     }
 
-    public void disableLeft(){
+    public void disableLeft() {
         left.disableProperty().set(true);
     }
 
-    public void disableRight(){
+    public void disableRight() {
         right.disableProperty().set(true);
     }
 }

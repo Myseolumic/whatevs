@@ -66,6 +66,9 @@ public class ServerCommunicator implements Runnable {
             Direction direction = new Direction();
             buttons.init(textArea, direction);
             int turn = 0;
+            Map.visualizeMap(mapArea, mapTiles, cordMatrix);
+
+
             textField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
@@ -92,8 +95,10 @@ public class ServerCommunicator implements Runnable {
                 Map.visualizeMap(mapArea, mapTiles, cordMatrix);
                 Map.placePlayer(mapArea, player);
                 System.out.println("X:" + player.getX() + " Y.:" + player.getY());
+
                 List<String> availableDirections = gson.fromJson(dis.readUTF(), ClientMovementRequest.class).getDirections();
                 updateButtons(availableDirections);
+
                 //waits turn to end.
                 Thread.sleep(7000);
                 textArea.appendText("3...\n");
@@ -102,7 +107,7 @@ public class ServerCommunicator implements Runnable {
                 Thread.sleep(1000);
                 textArea.appendText("1...\n");
                 Thread.sleep(1000);
-                if(!running){
+                if (!running) {
                     break;
                 }
                 textArea.appendText("Turn is over.\n");
@@ -116,9 +121,10 @@ public class ServerCommunicator implements Runnable {
         }
     }
 
-    public void stopRunning(){
+    public void stopRunning() {
         this.running = false;
     }
+
     private void updateButtons(List<String> directions) {
         buttons.enableAll();
         System.out.println(directions.toString());

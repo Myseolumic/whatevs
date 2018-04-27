@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import common.ClientMovementRequest;
 import common.MapData;
+import javafx.application.Platform;
 import tiles.Tile;
 
 import java.io.DataInputStream;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 
 public class ClientHandler implements Runnable {
 
@@ -20,6 +22,7 @@ public class ClientHandler implements Runnable {
     private BlockingQueue<Boolean> turnFinished;
     private BlockingQueue<Player> playerLocation;
     private CountDownLatch cdl;
+    private final Semaphore semaphore;
     private Gson gson;
     private Tile[][] map;
     private Player location;
@@ -30,8 +33,9 @@ public class ClientHandler implements Runnable {
     public ClientHandler(Socket clientSocket, Gson gson, Tile[][] map, Player location,
                          BlockingQueue<Boolean> turnFinished,
                          BlockingQueue<Player> playerLocation,
-                         CountDownLatch cdl
-    ) throws IOException{
+                         CountDownLatch cdl,
+                         Semaphore semaphore
+    ) throws IOException {
         this.clientSocket = clientSocket;
         this.dis = new DataInputStream(clientSocket.getInputStream());
         this.dos = new DataOutputStream(clientSocket.getOutputStream());
@@ -42,6 +46,7 @@ public class ClientHandler implements Runnable {
         this.turnFinished = turnFinished;
         this.playerLocation = playerLocation;
         this.cdl = cdl;
+        this.semaphore = semaphore;
         this.location = location;
     }
 
@@ -62,51 +67,56 @@ public class ClientHandler implements Runnable {
             cdl.await();
             while (!clientDisconnected) {
                 dos.writeUTF(gson.toJson(location));
-                List<String> availableDirections = processMap(map,location);
+                List<String> availableDirections = processMap(map, location);
                 dos.writeUTF(gson.toJson(new ClientMovementRequest(availableDirections)));
                 processInput(dis.readInt(), dis.readUTF());
+                semaphore.acquire(); //wait for other players to finish
             }
-
+        } catch (InterruptedException e){
+            System.err.println("Shutting down ClientHandler for port: "+clientSocket.getPort());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void processInput(int id, String str) throws IOException{
-        if(id == 0){ //text
-            System.out.println("[Client]: "+str);
+    private void processInput(int id, String str) throws IOException, InterruptedException {
+        if (id == 0) { //text
+            System.out.println("[Client]: " + str); //move this to a seperate thread.
         }
-        if(id == 1){ //movement
-            if(str == "stop"){
+        if (id == 1) { //movement
+            if (str.equals("stop")) {
                 System.out.println("Client didn't move.");
+                turnFinished.put(true);
                 return;
             }
-            System.out.println("client is being moved "+str);
-            if(str.equals("up")){
+            System.out.println("client is being moved " + str);
+            if (str.equals("up")) {
                 location.modY(-1);
             }
-            if(str.equals("down")){
+            if (str.equals("down")) {
                 location.modY(1);
             }
-            if(str.equals("right")){
+            if (str.equals("right")) {
                 location.modX(1);
             }
-            if(str.equals("left")){
+            if (str.equals("left")) {
                 location.modX(-1);
             }
-
+            turnFinished.put(true);
         }
-        if(id == 404){
+        if (id == 404) {
             System.out.println(str);
+            turnFinished.put(false);
             this.close();
         }
     }
 
-    private void close() throws IOException{
+    private void close() throws IOException {
         clientDisconnected = true;
         dos.close();
         dis.close();
         clientSocket.close();
+        Platform.exit();
     }
 
     private static List<String> processMap(Tile[][] map, Player player) {
