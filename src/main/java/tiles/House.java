@@ -1,6 +1,6 @@
 package tiles;
 
-import server.Player;
+import client.PlayerStats;
 
 public class House implements Tile {
     @Override
@@ -9,7 +9,7 @@ public class House implements Tile {
     }
 
     @Override
-    public void enteredTile(Player player) {
+    public void enteredTile(PlayerStats player) {
         int randomEvent = (int) Math.ceil(Math.random()*3);
 
         switch(randomEvent) {

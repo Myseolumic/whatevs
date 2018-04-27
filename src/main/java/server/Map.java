@@ -24,9 +24,7 @@ public class Map {
     }
 
     public static void placePlayer(GridPane map, Player location) {
-        Platform.runLater(() -> {
-            map.add(new ImageView(new Image(location.getResourcePath())), location.getX(), location.getY());
-        });
+        Platform.runLater(() -> map.add(new ImageView(new Image(location.getResourcePath())), location.getX(), location.getY()));
     }
 
     public static Tile[][] stringToTiles(String[][] miniMap) {

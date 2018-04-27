@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -45,11 +46,15 @@ public class Main extends Application {
         midLeft.setTop(textArea);
         midLeft.setCenter(textField);
 
+        Label name = new Label();
         Label characterBar = new Label();
         Label hpBar = new Label();
         Label damage = new Label();
-        Labels info = new Labels(characterBar, hpBar,damage);
-        topRight.setCenter(hpBar);
+        StatLabels info = new StatLabels(name, characterBar, hpBar,damage);
+        VBox stats = new VBox();
+        stats.getChildren().addAll(name, characterBar,hpBar,damage);
+        topRight.setCenter(stats);
+
 
 
         GridPane midRight = new GridPane();

@@ -1,10 +1,10 @@
 package tiles;
 
-import server.Player;
+import client.PlayerStats;
 
 public class Dark implements Tile {
     @Override
-    public void enteredTile(Player player) {
+    public void enteredTile(PlayerStats player) {
 
     }
 

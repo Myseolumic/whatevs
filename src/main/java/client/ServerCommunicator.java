@@ -4,18 +4,19 @@ import com.google.gson.Gson;
 import common.ClientMovementRequest;
 import common.MapData;
 import javafx.application.Platform;
-import javafx.scene.input.KeyCode;
-import server.Player;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import server.Map;
+import server.Player;
 import tiles.Tile;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.List;
 
 public class ServerCommunicator implements Runnable {
@@ -24,13 +25,13 @@ public class ServerCommunicator implements Runnable {
     private TextArea textArea;
     private TextField textField;
     private Buttons buttons;
-    private Labels labels;
+    private StatLabels statLabels;
     private Player player;
     private DataInputStream dis;
     private DataOutputStream dos;
     private volatile boolean running = true;
 
-    public ServerCommunicator(GridPane mapArea, TextArea textArea, TextField textField, Buttons buttons, Labels labels) throws Exception {
+    public ServerCommunicator(GridPane mapArea, TextArea textArea, TextField textField, Buttons buttons, StatLabels statLabels) throws Exception {
         this.serverSocket = new Socket("127.0.0.1", 1337);
         this.dis = new DataInputStream(serverSocket.getInputStream());
         this.dos = new DataOutputStream(serverSocket.getOutputStream());
@@ -39,7 +40,7 @@ public class ServerCommunicator implements Runnable {
         this.textArea = textArea;
         this.textField = textField;
         this.buttons = buttons;
-        this.labels = labels;
+        this.statLabels = statLabels;
     }
 
     public void close() throws IOException {
@@ -55,6 +56,11 @@ public class ServerCommunicator implements Runnable {
     public void run() {
         try {
             Gson gson = new Gson();
+
+            PlayerStats stats = createStats("Jaanus");
+            statLabels.setName(stats.getName());
+            statLabels.setCharacter(stats.getAnimalClass());
+            statLabels.setDamage(String.valueOf(stats.getDmg()));
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
             boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
             Direction direction = new Direction();
@@ -80,15 +86,14 @@ public class ServerCommunicator implements Runnable {
                 }*/
                 direction.setDirection("stop");
                 player = gson.fromJson(dis.readUTF(), Player.class);
-                labels.setCharacter(player.getName());
-                labels.setHp(String.valueOf(player.getHealth()));
+                mapTiles[player.getX()][player.getY()].enteredTile(stats);
+                statLabels.setHp(String.valueOf(stats.getHealth()),String.valueOf(stats.getMaxHealth()));
                 cordMatrix[player.getX()][player.getY()] = true;
                 Map.visualizeMap(mapArea, mapTiles, cordMatrix);
                 Map.placePlayer(mapArea, player);
                 System.out.println("X:" + player.getX() + " Y.:" + player.getY());
                 List<String> availableDirections = gson.fromJson(dis.readUTF(), ClientMovementRequest.class).getDirections();
                 updateButtons(availableDirections);
-                mapTiles[player.getX()][player.getY()].enteredTile(player);
                 //waits turn to end.
                 Thread.sleep(7000);
                 textArea.appendText("3...\n");
@@ -130,5 +135,28 @@ public class ServerCommunicator implements Runnable {
         if (!directions.contains("right")) {
             buttons.disableRight();
         }
+    }
+
+    private PlayerStats createStats(String name) {
+        List<String> classes = Arrays.asList("Hedgehog", "Giraffe", "Wolf");
+        int damage=0;
+        int health=0;
+        int randomClass = (int) Math.floor(Math.random()*classes.size());
+        switch(randomClass) {
+            case 0:
+                damage = 5;
+                health = 14;
+                break;
+            case 1:
+                damage = 4;
+                health = 20;
+                break;
+            case 2:
+                damage = 7;
+                health = 10;
+                break;
+        }
+
+        return new PlayerStats(name, classes.get(randomClass),health, damage);
     }
 }

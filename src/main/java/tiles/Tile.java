@@ -1,9 +1,9 @@
 package tiles;
 
-import server.Player;
+import client.PlayerStats;
 
 public interface Tile {
-    void enteredTile(Player player);
+    void enteredTile(PlayerStats player);
     String getResourcePath();
     boolean isActivated = false;
 }

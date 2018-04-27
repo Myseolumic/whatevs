@@ -1,6 +1,6 @@
 package tiles;
 
-import server.Player;
+import client.PlayerStats;
 
 public class Trap implements Tile {
     @Override
@@ -9,8 +9,9 @@ public class Trap implements Tile {
     }
 
     @Override
-    public void enteredTile(Player player) {
-        System.out.println(player.getName() + " Entered a Trap tile");
+    public void enteredTile(PlayerStats player) {
+        player.setHealth(player.getHealth()-5);
+        System.out.println(player.getHealth());
     }
 
     @Override

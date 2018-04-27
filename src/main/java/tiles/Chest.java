@@ -1,6 +1,6 @@
 package tiles;
 
-import server.Player;
+import client.PlayerStats;
 
 public class Chest implements Tile {
     @Override
@@ -9,7 +9,7 @@ public class Chest implements Tile {
     }
 
     @Override
-    public void enteredTile(Player player) {
+    public void enteredTile(PlayerStats player) {
         System.out.println(player.getName() + " entered chest area");
     }
 

@@ -1,6 +1,6 @@
 package tiles;
 
-import server.Player;
+import client.PlayerStats;
 
 public class Tree implements Tile {
     @Override
@@ -10,7 +10,7 @@ public class Tree implements Tile {
 
 
     @Override
-    public void enteredTile(Player player) {
+    public void enteredTile(PlayerStats player) {
         System.out.println(player.getName() + " entered Tree area");
     }
 
