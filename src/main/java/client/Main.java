@@ -47,14 +47,12 @@ public class Main extends Application {
         midLeft.setCenter(textField);
 
         Label name = new Label();
-        Label characterBar = new Label();
         Label hpBar = new Label();
         Label damage = new Label();
-        StatLabels info = new StatLabels(name, characterBar, hpBar,damage);
+        StatLabels info = new StatLabels(name, hpBar, damage);
         VBox stats = new VBox();
-        stats.getChildren().addAll(name, characterBar,hpBar,damage);
+        stats.getChildren().addAll(name, hpBar, damage);
         topRight.setCenter(stats);
-
 
 
         GridPane midRight = new GridPane();
@@ -81,8 +79,8 @@ public class Main extends Application {
         //insert all needed IO/other Threads
         ServerCommunicator comm;
         Thread ioThread;
-        try{
-            comm = new ServerCommunicator(map,textArea,textField, buttons, info);
+        try {
+            comm = new ServerCommunicator(map, textArea, textField, buttons, info);
             ioThread = new Thread(comm);
             ioThread.start();
         } catch (ConnectException e) {

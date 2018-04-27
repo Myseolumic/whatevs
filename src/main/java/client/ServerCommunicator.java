@@ -58,8 +58,7 @@ public class ServerCommunicator implements Runnable {
             Gson gson = new Gson();
 
             PlayerStats stats = createStats("Jaanus");
-            statLabels.setName(stats.getName());
-            statLabels.setCharacter(stats.getAnimalClass());
+            statLabels.setName(stats.getName(), stats.getAnimalClass());
             statLabels.setDamage(String.valueOf(stats.getDmg()));
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
             boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
@@ -89,8 +88,11 @@ public class ServerCommunicator implements Runnable {
                 direction.setDirection("stop");
                 player = gson.fromJson(dis.readUTF(), Player.class);
                 System.out.println("Your turn has started.");
-                mapTiles[player.getX()][player.getY()].enteredTile(stats);
-                statLabels.setHp(String.valueOf(stats.getHealth()),String.valueOf(stats.getMaxHealth()));
+                Tile currentTile = mapTiles[player.getX()][player.getY()];
+                String eventInfo = currentTile.enteredTile(stats);
+                textArea.appendText(eventInfo+"\n");
+                currentTile.Activate();
+                statLabels.setHp(String.valueOf(stats.getHealth()),String.valueOf(stats.getMaxHealth()),stats.isAlive());
                 cordMatrix[player.getX()][player.getY()] = true;
                 Map.visualizeMap(mapArea, mapTiles, cordMatrix);
                 Map.placePlayer(mapArea, player);
@@ -110,7 +112,7 @@ public class ServerCommunicator implements Runnable {
                 if (!running) {
                     break;
                 }
-                textArea.appendText("Turn is over.\n");
+                textArea.appendText("--------------------------------------------------\n");
 
                 System.out.println(direction.getDirection());
                 dos.writeInt(1);

@@ -10,12 +10,16 @@ public class Tree implements Tile {
 
 
     @Override
-    public void enteredTile(PlayerStats player) {
-        System.out.println(player.getName() + " entered Tree area");
+    public String enteredTile(PlayerStats player) {
+        return "You see trees of green... red roses too.";
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "TreeTile";
+    }
+
+    @Override
+    public void Activate() {
     }
 }

@@ -3,19 +3,33 @@ package tiles;
 import client.PlayerStats;
 
 public class Chest implements Tile {
+    private boolean isActivated = false;
+
     @Override
     public String getResourcePath() {
         return "TileSprites/chest.png";
     }
 
     @Override
-    public void enteredTile(PlayerStats player) {
-        System.out.println(player.getName() + " entered chest area");
+    public String enteredTile(PlayerStats player) {
+        if (!isActivated) {
+            return "Oh sweet baby jesus! Someone left their goods behind. Now they are yours.";
+        } else {
+            return "You see before you a ravaged bag of goodies. It's empty.";
+        }
+
+
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "ChestTile";
     }
+
+    @Override
+    public void Activate() {
+        isActivated = true;
+    }
+
 
 }

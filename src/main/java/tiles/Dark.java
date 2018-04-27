@@ -4,8 +4,8 @@ import client.PlayerStats;
 
 public class Dark implements Tile {
     @Override
-    public void enteredTile(PlayerStats player) {
-
+    public String enteredTile(PlayerStats player) {
+        return "";
     }
 
     @Override
@@ -14,7 +14,11 @@ public class Dark implements Tile {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "DarkTile";
+    }
+
+    @Override
+    public void Activate() {
     }
 }

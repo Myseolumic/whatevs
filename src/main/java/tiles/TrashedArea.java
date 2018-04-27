@@ -9,13 +9,18 @@ public class TrashedArea implements Tile {
     }
 
     @Override
-    public void enteredTile(PlayerStats player) {
-        System.out.println(player.getName() + " entered trashed area");
+    public String enteredTile(PlayerStats player) {
+        player.setHealth(player.getHealth() - 5);
+        return "You should not play with radioactive waste. Took 5 damage.";
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "TrashedTile";
+    }
+
+    @Override
+    public void Activate() {
     }
 
 }

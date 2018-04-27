@@ -37,7 +37,7 @@ public class Buttons {
             direction.setDirection("left");
         });
         stop.setOnAction(event -> {
-            target.appendText("You will scout the area around you next turn.");
+            target.appendText("You will scout the area around you next turn.\n");
             direction.setDirection("stop");
         });
     }
