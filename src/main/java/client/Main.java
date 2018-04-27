@@ -52,7 +52,7 @@ public class Main extends Application {
         Label name = new Label();
         Label hpBar = new Label();
         Label damage = new Label();
-        String picturePath="TileSprites/characterPortrait.png";
+        String picturePath="TileSprites/hedgehog.png";
         StatLabels info = new StatLabels(name, hpBar, damage, picturePath);
         ImageView character = new ImageView(new Image(picturePath));
         VBox stats = new VBox();
