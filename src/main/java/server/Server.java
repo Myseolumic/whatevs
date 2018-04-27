@@ -51,8 +51,8 @@ public class Server {
                 Thread clientThread = new Thread(new ClientHandler(ss.accept(), gson, map, player, areFinished, locations, cdl, semaphore));
                 threads.add(clientThread);
                 clientThread.start();
-                cdl.countDown();
             }
+            cdl.countDown();
 
             System.out.println("No longer accepting more clients");
 

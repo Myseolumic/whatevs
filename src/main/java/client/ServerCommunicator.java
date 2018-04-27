@@ -68,7 +68,6 @@ public class ServerCommunicator implements Runnable {
             int turn = 0;
             Map.visualizeMap(mapArea, mapTiles, cordMatrix);
 
-
             textField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
@@ -89,6 +88,7 @@ public class ServerCommunicator implements Runnable {
                 }*/
                 direction.setDirection("stop");
                 player = gson.fromJson(dis.readUTF(), Player.class);
+                System.out.println("Your turn has started.");
                 mapTiles[player.getX()][player.getY()].enteredTile(stats);
                 statLabels.setHp(String.valueOf(stats.getHealth()),String.valueOf(stats.getMaxHealth()));
                 cordMatrix[player.getX()][player.getY()] = true;
