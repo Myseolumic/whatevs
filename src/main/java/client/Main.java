@@ -7,12 +7,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -31,10 +31,10 @@ public class Main extends Application {
         BorderPane topRight = new BorderPane();
 
         HBox inventory = new HBox();
-        Rectangle inventor_1 = new Rectangle(80, 80, Color.GREEN);
-        Rectangle inventor_2 = new Rectangle(80, 80, Color.BLUEVIOLET);
-        Rectangle inventor_3 = new Rectangle(80, 80, Color.BROWN);
-        Rectangle inventor_4 = new Rectangle(80, 80, Color.KHAKI);
+        ImageView inventor_1 = new ImageView(new Image("TileSprites/inventorySlot.png"));
+        ImageView inventor_2 = new ImageView(new Image("TileSprites/inventorySlot.png"));
+        ImageView inventor_3 = new ImageView(new Image("TileSprites/inventorySlot.png"));
+        ImageView inventor_4 = new ImageView(new Image("TileSprites/inventorySlot.png"));
         inventory.getChildren().addAll(inventor_1, inventor_2, inventor_3, inventor_4);
         topRight.setBottom(inventory);
         topSection.getChildren().addAll(map, topRight);
