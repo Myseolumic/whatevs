@@ -1,10 +1,9 @@
 package tiles;
 
-import Invenoty.Item;
-import Invenoty.TestItem;
+import inventory.Item;
+import inventory.TestItem;
 import client.ItemList;
 import client.PlayerStats;
-import javafx.scene.layout.GridPane;
 
 public class House implements Tile {
 
@@ -23,11 +22,9 @@ public class House implements Tile {
             switch (randomEvent) {
                 case 1://trap
                     player.setHealth(player.getHealth() - 5);
-                    try {
+                    if (itemList.getSize() > 0){
                         itemList.getItem().removeBonus(player);
-                        itemList.removeItem(itemList.getItem(),itemList.getItemGridPane());
-                    }catch (Exception ignored){
-
+                        itemList.removeItem(itemList.getItemGridPane());
                     }
                     event = "A shotgun triggered as you opened the door. Took 5 damage. "+ (roomsUnchecked-1) + " rooms unchecked.";
                     break;

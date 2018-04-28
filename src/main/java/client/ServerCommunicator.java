@@ -1,6 +1,5 @@
 package client;
 
-import Invenoty.Item;
 import com.google.gson.Gson;
 import common.ClientMovementRequest;
 import common.MapData;

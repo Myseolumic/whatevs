@@ -1,7 +1,7 @@
 package tiles;
 
-import Invenoty.Item;
-import Invenoty.TestItem;
+import inventory.Item;
+import inventory.TestItem;
 import client.ItemList;
 import client.PlayerStats;
 

@@ -1,4 +1,4 @@
-package Invenoty;
+package inventory;
 
 import client.PlayerStats;
 
