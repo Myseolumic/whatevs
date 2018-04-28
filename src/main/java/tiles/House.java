@@ -23,13 +23,19 @@ public class House implements Tile {
             switch (randomEvent) {
                 case 1://trap
                     player.setHealth(player.getHealth() - 5);
+                    try {
+                        itemList.getItem().removeBonus(player);
+                        itemList.removeItem(itemList.getItem(),itemList.getItemGridPane());
+                    }catch (Exception ignored){
+
+                    }
                     event = "A shotgun triggered as you opened the door. Took 5 damage. "+ (roomsUnchecked-1) + " rooms unchecked.";
                     break;
                 case 2://loot
                     Item loot = new TestItem();
-                    player.setDmg(player.getDmg()+ loot.getBonus());
-                    itemList.addItem(this,loot,itemList.getItemGridPane());
-                    event = "You see Walmart bags in the corner. Found loot. "+ (roomsUnchecked-1) + " rooms unchecked.";
+                    loot.getBonus(player);
+                    itemList.addItem(loot,itemList.getItemGridPane());
+                    event = "You see Walmart bags in the corner. Found"+ loot.getName()+ " (roomsUnchecked-1) +  rooms unchecked.";
                     break;
                 case 3://nothing
                     event = "Did not find anything from this room. " + (roomsUnchecked-1) + " rooms unchecked.";

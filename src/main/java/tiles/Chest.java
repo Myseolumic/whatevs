@@ -4,7 +4,6 @@ import Invenoty.Item;
 import Invenoty.TestItem;
 import client.ItemList;
 import client.PlayerStats;
-import javafx.scene.layout.GridPane;
 
 public class Chest implements Tile {
     private boolean isActivated = false;
@@ -18,9 +17,9 @@ public class Chest implements Tile {
     public String enteredTile(PlayerStats player, ItemList itemList) {
         if (!isActivated) {
             Item loot = new TestItem();
-            player.setDmg(player.getDmg()+ loot.getBonus());
-            itemList.addItem(this,loot,itemList.getItemGridPane());
-            return "Oh sweet baby jesus! Someone left their goods behind. Now they are yours.";
+            loot.getBonus(player);
+            itemList.addItem(loot,itemList.getItemGridPane());
+            return "Oh sweet baby jesus! Someone left their goods behind. You found "+loot.getName()+".";
         } else {
             return "You see before you a ravaged bag of goodies. It's empty.";
         }

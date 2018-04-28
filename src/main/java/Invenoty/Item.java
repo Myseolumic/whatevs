@@ -1,7 +1,10 @@
 package Invenoty;
 
+import client.PlayerStats;
+
 public interface Item {
-    int getBonus();
+    void getBonus(PlayerStats player);
     String getResourcePath();
     String getName();
+    void removeBonus(PlayerStats playerStats);
 }

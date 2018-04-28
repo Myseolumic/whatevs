@@ -1,10 +1,14 @@
 package Invenoty;
 
+import client.PlayerStats;
+
 public class TestItem implements Item {
 
+
+
     @Override
-    public int getBonus() {
-        return 2;
+    public void getBonus(PlayerStats player) {
+        player.setDmg(player.getDmg() + 2);
     }
 
     @Override
@@ -16,5 +20,11 @@ public class TestItem implements Item {
     public String getName() {
         return "PowPow";
     }
+
+    @Override
+    public void removeBonus(PlayerStats player) {
+            player.setDmg(player.getDmg() - 2);
+    }
+
 
 }
