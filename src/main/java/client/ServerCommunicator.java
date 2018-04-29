@@ -67,7 +67,7 @@ public class ServerCommunicator implements Runnable {
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
             boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
             Direction direction = new Direction();
-            buttons.init(textArea, direction);
+            buttons.init(textArea, direction,itemslots,stats);
             int turn = 0;
             Map.visualizeMap(mapArea, mapTiles, cordMatrix);
 
@@ -122,6 +122,7 @@ public class ServerCommunicator implements Runnable {
                 System.out.println(direction.getDirection());
                 dos.writeInt(1);
                 dos.writeUTF(direction.getDirection());
+                running = stats.isAlive();
             }
         } catch (Exception e) {
             e.printStackTrace();

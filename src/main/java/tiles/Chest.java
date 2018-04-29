@@ -17,8 +17,7 @@ public class Chest implements Tile {
     public String enteredTile(PlayerStats player, ItemList itemList) {
         if (!isActivated) {
             Item loot = new TestItem();
-            loot.getBonus(player);
-            itemList.addItem(loot,itemList.getItemGridPane());
+            itemList.addItem(loot,itemList.getItemGridPane(),player);
             return "Oh sweet baby jesus! Someone left their goods behind. You found "+loot.getName()+".";
         } else {
             return "You see before you a ravaged bag of goodies. It's empty.";

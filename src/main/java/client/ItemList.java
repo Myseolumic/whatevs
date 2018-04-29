@@ -17,9 +17,10 @@ public class ItemList {
         this.itemGridPane = itemGridPane;
     }
 
-    public void addItem(Item item, GridPane itemsGridPane) {
+    public void addItem(Item item, GridPane itemsGridPane, PlayerStats player) {
         if (itemArray.size() < 5) {
             itemArray.add(item);
+            item.getBonus(player);
             placeItem(item, itemsGridPane, itemArray);
         } else {
             System.out.println("Su inventory on täis");
@@ -33,9 +34,10 @@ public class ItemList {
     }
 
 
-    public void removeItem(GridPane itemsGridPane) {
+    public void removeItem(GridPane itemsGridPane, PlayerStats player) {
         if (itemArray.size() > 0) {
             displaceItem(itemsGridPane, itemArray);
+            itemArray.get(itemArray.size()-1).removeBonus(player);
         }
     }
 

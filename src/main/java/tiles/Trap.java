@@ -16,8 +16,7 @@ public class Trap implements Tile {
         if (!isActivated) {
             player.setHealth(player.getHealth() - 5);
             if (itemList.getSize() > 0){
-                itemList.getItem().removeBonus(player);
-                itemList.removeItem(itemList.getItemGridPane());
+                itemList.removeItem(itemList.getItemGridPane(),player);
             }
             return "You have stumbled upon a queer looking contraption. Took 5 damage.";
         } else {

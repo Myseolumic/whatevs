@@ -10,16 +10,18 @@ public class Buttons {
     private Button left;
     private Button right;
     private Button stop;
+    private Button drop1;
 
-    public Buttons(Button up, Button down, Button left, Button right, Button stop) {
+    public Buttons(Button up, Button down, Button left, Button right, Button stop, Button drop1) {
         this.up = up;
         this.down = down;
         this.left = left;
         this.right = right;
         this.stop = stop;
+        this.drop1 = drop1;
     }
 
-    public void init(TextArea target, Direction direction) {
+    public void init(TextArea target, Direction direction, ItemList itemList,PlayerStats player) {
         up.setOnAction((ActionEvent event) -> {
             target.appendText("You will move North next turn.\n");
             direction.setDirection("up");
@@ -39,6 +41,10 @@ public class Buttons {
         stop.setOnAction(event -> {
             target.appendText("You will scout the area around you next turn.\n");
             direction.setDirection("stop");
+        });
+        drop1.setOnAction(event -> {
+            target.appendText("You just dropped **** item.\n");
+            itemList.removeItem(itemList.getItemGridPane(),player);
         });
     }
 

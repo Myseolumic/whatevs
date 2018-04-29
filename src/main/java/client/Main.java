@@ -70,12 +70,17 @@ public class Main extends Application {
         Button up = new Button("UP");
         Button down = new Button("DOWN");
         Button stop = new Button("STOP");
-        Buttons buttons = new Buttons(up, down, left, right, stop);
+        Button drop1 = new Button("DROP");
+//        Button drop2 = new Button("DROP");
+//        Button drop3 = new Button("DROP");
+//        Button drop4 = new Button("DROP");
+        Buttons buttons = new Buttons(up, down, left, right, stop,drop1);
         midRight.add(up, 1, 0);
         midRight.add(left, 0, 1);
         midRight.add(stop, 1, 1);
         midRight.add(right, 2, 1);
         midRight.add(down, 1, 2);
+        midRight.add(drop1,3,0);
 
         HBox middleSection = new HBox();
         middleSection.getChildren().addAll(midLeft, midRight);

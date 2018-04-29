@@ -57,4 +57,5 @@ public class PlayerStats {
     public boolean isAlive() {
         return isAlive;
     }
+
 }
