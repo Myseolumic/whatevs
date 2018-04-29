@@ -155,6 +155,7 @@ public class ServerCommunicator implements Runnable {
         List<String> classes = Arrays.asList("Hedgehog", "Giraffe", "Wolf");
         int damage=0;
         int health=0;
+        int defence = 0;
         String portraitPath = "";
         int randomClass = 0; //(int) Math.floor(Math.random()*classes.size());
         switch(randomClass) {
@@ -162,17 +163,20 @@ public class ServerCommunicator implements Runnable {
                 damage = 5;
                 health = 14;
                 portraitPath = "TileSprites/hedgehog.png";
+                defence = 6;
                 break;
             case 1:
                 damage = 4;
                 health = 20;
+                damage = 5;
                 break;
             case 2:
                 damage = 7;
                 health = 10;
+                defence = 3;
                 break;
         }
 
-        return new PlayerStats(name, classes.get(randomClass),portraitPath,health, damage);
+        return new PlayerStats(name, classes.get(randomClass),portraitPath,health, damage,defence);
     }
 }

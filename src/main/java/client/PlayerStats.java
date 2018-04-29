@@ -7,16 +7,18 @@ public class PlayerStats {
     private int health;
     private int maxHealth;
     private int dmg;
+    private int defence;
     private boolean isAlive = true;
 
 
-    public PlayerStats(String name, String animalClass,String portraitPath, int Health, int dmg) {
+    public PlayerStats(String name, String animalClass,String portraitPath, int Health, int dmg, int defence) {
         this.portraitPath = portraitPath;
         this.name = name;
         this.animalClass = animalClass;
         this.health = Health;
         this.maxHealth = Health;
         this.dmg = dmg;
+        this.defence = defence;
     }
 
     public String getName() {
@@ -58,4 +60,11 @@ public class PlayerStats {
         return isAlive;
     }
 
+    public int getDefence() {
+        return defence;
+    }
+
+    public void setDefence(int defence) {
+        this.defence = defence;
+    }
 }

@@ -21,7 +21,7 @@ public class Buttons {
         this.drop1 = drop1;
     }
 
-    public void init(TextArea target, Direction direction, ItemList itemList,PlayerStats player) {
+    public void init(TextArea target, Direction direction, ItemList itemList, PlayerStats player) {
         up.setOnAction((ActionEvent event) -> {
             target.appendText("You will move North next turn.\n");
             direction.setDirection("up");
@@ -43,8 +43,10 @@ public class Buttons {
             direction.setDirection("stop");
         });
         drop1.setOnAction(event -> {
-            target.appendText("You just dropped **** item.\n");
-            itemList.removeItem(itemList.getItemGridPane(),player);
+            if (itemList.getSize() > 0) {
+                target.appendText("You just dropped **** item.\n");
+                itemList.removeItem(itemList.getItemGridPane(), player);
+            }
         });
     }
 

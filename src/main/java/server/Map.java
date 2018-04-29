@@ -63,7 +63,7 @@ public class Map {
         boolean[][] map = new boolean[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                map[i][j] = true;
+                map[i][j] = true;/// NEEDS TO BE FALSE
             }
         }
         return map;
@@ -115,7 +115,7 @@ public class Map {
             for (int l = -1; l < 2; l++) {
                 if (i + k >= 0 && j + l >= 0 && i + k < map.length && j + l < map.length && map[i + k][j + l] != null) {
                     if (map[i + k][j + l].getClass().equals(c.getClass())) {
-                        return false; // NEEDS TO BE FALSE
+                        return true;
                     }
                 }
             }
