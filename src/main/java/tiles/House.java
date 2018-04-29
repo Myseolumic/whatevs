@@ -52,7 +52,7 @@ public class House implements Tile {
     }
 
     @Override
-    public void Activate() {
+    public void activate() {
         if(!isActivated) {
             roomsUnchecked-=1;
             if(roomsUnchecked == 0) {

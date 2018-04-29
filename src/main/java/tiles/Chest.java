@@ -32,7 +32,7 @@ public class Chest implements Tile {
     }
 
     @Override
-    public void Activate() {
+    public void activate() {
         isActivated = true;
     }
 
