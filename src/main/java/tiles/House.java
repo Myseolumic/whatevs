@@ -11,29 +11,30 @@ public class House implements Tile {
     public String getResourcePath() {
         return "TileSprites/house.png";
     }
+
     private int roomsUnchecked = 3;
     private boolean isActivated = false;
 
     @Override
     public String enteredTile(PlayerStats player, ItemList itemList) {
         String event = "";
-        if(!isActivated) {
+        if (!isActivated) {
             int randomEvent = (int) Math.ceil(Math.random() * 3);
             switch (randomEvent) {
                 case 1://trap
                     player.setHealth(player.getHealth() - 5);
-                    if (itemList.getSize() > 0){
-                        itemList.removeItem(itemList.getItemGridPane(),player);
+                    if (itemList.getSize() > 0) {
+                        itemList.removeItem(itemList.getItemGridPane(), player);
                     }
-                    event = "A shotgun triggered as you opened the door. Took 5 damage. "+ (roomsUnchecked-1) + " rooms unchecked.";
+                    event = "A shotgun triggered as you opened the door. Took 5 damage. " + (roomsUnchecked - 1) + " rooms unchecked.";
                     break;
                 case 2://loot
                     Item loot = new TestItem();
-                    itemList.addItem(loot,itemList.getItemGridPane(),player);
-                    event = "You see Walmart bags in the corner. Found"+ loot.getName()+ " (roomsUnchecked-1) +  rooms unchecked.";
+                    itemList.addItem(loot, itemList.getItemGridPane(), player);
+                    event = "You see Walmart bags in the corner. Found " + loot.getName() + "! " + (roomsUnchecked - 1) + " rooms unchecked.";
                     break;
                 case 3://nothing
-                    event = "Did not find anything from this room. " + (roomsUnchecked-1) + " rooms unchecked.";
+                    event = "Did not find anything from this room. " + (roomsUnchecked - 1) + " rooms unchecked.";
                     break;
 
             }
@@ -53,9 +54,9 @@ public class House implements Tile {
 
     @Override
     public void Activate() {
-        if(!isActivated) {
-            roomsUnchecked-=1;
-            if(roomsUnchecked == 0) {
+        if (!isActivated) {
+            roomsUnchecked -= 1;
+            if (roomsUnchecked == 0) {
                 isActivated = true;
             }
         }
