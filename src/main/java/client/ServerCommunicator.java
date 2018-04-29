@@ -95,7 +95,7 @@ public class ServerCommunicator implements Runnable {
                 Tile currentTile = mapTiles[player.getX()][player.getY()];
                 String eventInfo = currentTile.enteredTile(stats,itemslots);
                 textArea.appendText(eventInfo+"\n");
-                currentTile.Activate();
+                currentTile.activate();
                 statLabels.setHp(String.valueOf(stats.getHealth()),String.valueOf(stats.getMaxHealth()),stats.isAlive());
                 statLabels.setDamage(String.valueOf(stats.getDmg()));
                 cordMatrix[player.getX()][player.getY()] = true;

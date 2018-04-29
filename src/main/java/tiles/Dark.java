@@ -21,6 +21,6 @@ public class Dark implements Tile {
     }
 
     @Override
-    public void Activate() {
+    public void activate() {
     }
 }
