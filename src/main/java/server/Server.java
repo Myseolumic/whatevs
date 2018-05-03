@@ -39,7 +39,7 @@ public class Server {
             //generate x and y for players
             int players = 1;
             int[][] spawnLocations = generateLocations(players, size, rand);
-            System.out.println("Set spawn locations for 4 players.");
+            System.out.println("Set spawn locations for "+players+" player(s).");
 
             System.out.println("Waiting for clients...");
             List<Thread> threads = new ArrayList<>();

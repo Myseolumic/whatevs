@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import common.ClientMovementRequest;
+import common.Direction;
 import common.MapData;
 import javafx.application.Platform;
 import tiles.Tile;
@@ -84,23 +85,23 @@ public class ClientHandler implements Runnable {
             System.out.println("[Client]: " + str); //move this to a seperate thread.
         }
         if (id == 1) { //movement
-            if (str.equals("stop")) {
-                System.out.println("Client didn't move.");
-                turnFinished.put(true);
-                return;
-            }
-            System.out.println("client is being moved " + str);
-            if (str.equals("up")) {
-                location.modY(-1);
-            }
-            if (str.equals("down")) {
-                location.modY(1);
-            }
-            if (str.equals("right")) {
-                location.modX(1);
-            }
-            if (str.equals("left")) {
-                location.modX(-1);
+            Direction direction = gson.fromJson(str, Direction.class);
+            switch (direction){
+                case STOP:
+                    System.out.println("Client didn't move.");
+                    break;
+                case UP:
+                    location.modY(-1);
+                    break;
+                case DOWN:
+                    location.modY(1);
+                    break;
+                case LEFT:
+                    location.modX(-1);
+                    break;
+                case RIGHT:
+                    location.modX(1);
+                    break;
             }
             turnFinished.put(true);
         }

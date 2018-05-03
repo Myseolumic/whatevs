@@ -2,6 +2,8 @@ package client;
 
 import com.google.gson.Gson;
 import common.ClientMovementRequest;
+import common.Direction;
+import common.DirectionHolder;
 import common.MapData;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
@@ -66,8 +68,8 @@ public class ServerCommunicator implements Runnable {
             statLabels.setDamage(String.valueOf(stats.getDmg()));
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
             boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
-            Direction direction = new Direction();
-            buttons.init(textArea, direction,itemslots,stats);
+            DirectionHolder directionHolder = new DirectionHolder();
+            buttons.init(textArea, directionHolder,itemslots,stats);
             int turn = 0;
             Map.visualizeMap(mapArea, mapTiles, cordMatrix);
 
@@ -89,7 +91,7 @@ public class ServerCommunicator implements Runnable {
                 if(turn%5 == 0) {
                     mapTiles = Map.reduceMapSize(mapTiles);
                 }*/
-                direction.setDirection("stop");
+                directionHolder.setDirection(Direction.STOP);
                 player = gson.fromJson(dis.readUTF(), Player.class);
                 System.out.println("Your turn has started.");
                 Tile currentTile = mapTiles[player.getX()][player.getY()];
@@ -119,9 +121,9 @@ public class ServerCommunicator implements Runnable {
                 }
                 textArea.appendText("--------------------------------------------------\n\n");
 
-                System.out.println(direction.getDirection());
+                System.out.println(directionHolder.getDirection());
                 dos.writeInt(1);
-                dos.writeUTF(direction.getDirection());
+                dos.writeUTF(gson.toJson(directionHolder.getDirection()));
                 running = stats.isAlive();
             }
         } catch (Exception e) {
