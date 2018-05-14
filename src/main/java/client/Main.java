@@ -65,11 +65,16 @@ public class Main extends Application {
 
 
         GridPane midRight = new GridPane();
-        Button left = new Button("LEFT");
-        Button right = new Button("RIGHT");
-        Button up = new Button("UP");
-        Button down = new Button("DOWN");
-        Button stop = new Button("STOP");
+        ImageView upArrow = new ImageView(new Image("TileSprites/up.png"));
+        ImageView downArrow = new ImageView(new Image("TileSprites/down.png"));
+        ImageView leftArrow = new ImageView(new Image("TileSprites/left.png"));
+        ImageView rightArrow = new ImageView(new Image("TileSprites/right.png"));
+        ImageView scoutButton = new ImageView(new Image("TileSprites/search.png"));
+        Button left = new Button("", leftArrow);
+        Button right = new Button("", rightArrow);
+        Button up = new Button("", upArrow);
+        Button down = new Button("", downArrow);
+        Button stop = new Button("",scoutButton);
         Button drop1 = new Button("DROP");
 //        Button drop2 = new Button("DROP");
 //        Button drop3 = new Button("DROP");

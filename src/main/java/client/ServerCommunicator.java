@@ -122,6 +122,9 @@ public class ServerCommunicator implements Runnable {
                 System.out.println(direction.getDirection());
                 dos.writeInt(1);
                 dos.writeUTF(direction.getDirection());
+                if(direction.getDirection() == "scout") {
+
+                }
                 running = stats.isAlive();
             }
         } catch (Exception e) {
