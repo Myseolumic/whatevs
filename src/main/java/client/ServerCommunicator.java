@@ -91,6 +91,7 @@ public class ServerCommunicator implements Runnable {
                 if(turn%5 == 0) {
                     mapTiles = Map.reduceMapSize(mapTiles);
                 }*/
+
                 directionHolder.setDirection(Direction.STOP);
                 player = gson.fromJson(dis.readUTF(), Player.class);
                 System.out.println("Your turn has started.");
@@ -119,6 +120,7 @@ public class ServerCommunicator implements Runnable {
                 if (!running) {
                     break;
                 }
+                scoutAround(cordMatrix, directionHolder);
                 textArea.appendText("--------------------------------------------------\n\n");
 
                 System.out.println(directionHolder.getDirection());
@@ -128,6 +130,18 @@ public class ServerCommunicator implements Runnable {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void scoutAround(boolean[][] cordMatrix, DirectionHolder directionHolder) {
+        if(directionHolder.getDirection().equals(Direction.STOP)) {
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    if(player.getY()+i >= 0 && player.getY() < cordMatrix.length && player.getX()+j >= 0 && player.getX()+j < cordMatrix.length)
+                    cordMatrix[player.getX()+j][player.getY()+i] = true;
+                }
+            }
+            System.out.println("Scouted");
         }
     }
 
