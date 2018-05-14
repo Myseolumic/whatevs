@@ -1,5 +1,7 @@
 package client;
 
+import common.Direction;
+import common.DirectionHolder;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -21,26 +23,26 @@ public class Buttons {
         this.drop1 = drop1;
     }
 
-    public void init(TextArea target, Direction direction, ItemList itemList, PlayerStats player) {
+    public void init(TextArea target, DirectionHolder directionHolder, ItemList itemList, PlayerStats player) {
         up.setOnAction((ActionEvent event) -> {
             target.appendText("You will move North next turn.\n");
-            direction.setDirection("up");
+            directionHolder.setDirection(Direction.UP);
         });
         down.setOnAction(event -> {
             target.appendText("You will move South next turn.\n");
-            direction.setDirection("down");
+            directionHolder.setDirection(Direction.DOWN);
         });
         right.setOnAction(event -> {
             target.appendText("You will move East next turn.\n");
-            direction.setDirection("right");
+            directionHolder.setDirection(Direction.RIGHT);
         });
         left.setOnAction(event -> {
             target.appendText("You will move West next turn.\n");
-            direction.setDirection("left");
+            directionHolder.setDirection(Direction.LEFT);
         });
         stop.setOnAction(event -> {
             target.appendText("You will scout the area around you next turn.\n");
-            direction.setDirection("stop");
+            directionHolder.setDirection(Direction.STOP);
         });
         drop1.setOnAction(event -> {
             if (itemList.getSize() > 0) {
