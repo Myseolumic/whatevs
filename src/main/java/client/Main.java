@@ -75,17 +75,20 @@ public class Main extends Application {
         Button up = new Button("", upArrow);
         Button down = new Button("", downArrow);
         Button stop = new Button("",scoutButton);
-        Button drop1 = new Button("DROP");
-//        Button drop2 = new Button("DROP");
-//        Button drop3 = new Button("DROP");
-//        Button drop4 = new Button("DROP");
-        Buttons buttons = new Buttons(up, down, left, right, stop,drop1);
+        Button drop1 = new Button("   DROP   ");
+        Button drop2 = new Button("     DROP     ");
+        Button drop3 = new Button("     DROP     ");
+        Button drop4 = new Button("     DROP     ");
+        Buttons buttons = new Buttons(up, down, left, right, stop,drop1,drop2,drop3,drop4);
         midRight.add(up, 1, 0);
         midRight.add(left, 0, 1);
         midRight.add(stop, 1, 1);
         midRight.add(right, 2, 1);
         midRight.add(down, 1, 2);
         midRight.add(drop1,3,0);
+        midRight.add(drop2,4,0);
+        midRight.add(drop3,5,0);
+        midRight.add(drop4,6,0);
 
         HBox middleSection = new HBox();
         middleSection.getChildren().addAll(midLeft, midRight);

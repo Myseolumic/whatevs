@@ -7,6 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
 public class Buttons {
+    private Button drop4;
+    private Button drop3;
+    private Button drop2;
     private Button up;
     private Button down;
     private Button left;
@@ -14,13 +17,16 @@ public class Buttons {
     private Button stop;
     private Button drop1;
 
-    public Buttons(Button up, Button down, Button left, Button right, Button stop, Button drop1) {
+    public Buttons(Button up, Button down, Button left, Button right, Button stop, Button drop1,Button drop2, Button drop3, Button drop4) {
         this.up = up;
         this.down = down;
         this.left = left;
         this.right = right;
         this.stop = stop;
         this.drop1 = drop1;
+        this.drop2 = drop2;
+        this.drop3 = drop3;
+        this.drop4 = drop4;
     }
 
     public void init(TextArea target, DirectionHolder directionHolder, ItemList itemList, PlayerStats player) {
@@ -45,9 +51,28 @@ public class Buttons {
             directionHolder.setDirection(Direction.STOP);
         });
         drop1.setOnAction(event -> {
-            if (itemList.getSize() > 0) {
+            if (itemList.getItemArray()[0] != null) {
                 target.appendText("You just dropped **** item.\n");
-                itemList.removeItem(itemList.getItemGridPane(), player);
+                itemList.removeItem(itemList.getItemGridPane(), player,0);
+            }
+        });
+        drop2.setOnAction(event -> {
+            if (itemList.getItemArray()[1] != null) {
+                target.appendText("You just dropped **** item.\n");
+                itemList.removeItem(itemList.getItemGridPane(), player,1);
+            }
+        });
+        drop3.setOnAction(event -> {
+            if (itemList.getItemArray()[2] != null) {
+                target.appendText(itemList.getSize()+ "");
+                target.appendText("You just dropped **** item.\n");
+                itemList.removeItem(itemList.getItemGridPane(), player,2);
+            }
+        });
+        drop4.setOnAction(event -> {
+            if (itemList.getItemArray()[3] != null) {
+                target.appendText("You just dropped **** item.\n");
+                itemList.removeItem(itemList.getItemGridPane(), player,3);
             }
         });
     }
