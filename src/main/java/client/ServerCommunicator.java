@@ -60,8 +60,6 @@ public class ServerCommunicator implements Runnable {
     public void run() {
         try {
             Gson gson = new Gson();
-
-
             PlayerStats stats = createStats("Jaanus");
             statLabels.setPortraitPath(stats.getPortraitPath());
             statLabels.setName(stats.getName(), stats.getAnimalClass());
@@ -90,10 +88,10 @@ public class ServerCommunicator implements Runnable {
             });
 
             while (running) {
-                /*turn+=1;
-                if(turn%5 == 0) {
+                turn+=1;
+                if(turn%6 == 0) {
                     mapTiles = Map.reduceMapSize(mapTiles);
-                }*/
+                }
 
                 directionHolder.setDirection(Direction.STOP);
                 player = gson.fromJson(dis.readUTF(), Player.class);
