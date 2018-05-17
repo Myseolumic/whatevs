@@ -47,13 +47,13 @@ public class ServerCommunicator implements Runnable {
         this.statLabels = statLabels;
     }
 
-    public void close() throws IOException {
+    public void close(boolean quit) throws IOException {
         dos.writeInt(404);
         dos.writeUTF("Client ragequit.");
         dis.close();
         dos.close();
         serverSocket.close();
-        Platform.exit();
+        if (quit) Platform.exit();
     }
 
     @Override
@@ -79,8 +79,8 @@ public class ServerCommunicator implements Runnable {
             textField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        dos.writeInt(0);
-                        dos.writeUTF(textField.getText());
+                        //dos.writeInt(0);
+                        //dos.writeUTF(textField.getText());
                         textArea.appendText(textField.getText());
                         textField.setText("");
                     } catch (Exception e) {
@@ -121,6 +121,12 @@ public class ServerCommunicator implements Runnable {
                 List<String> availableDirections = gson.fromJson(dis.readUTF(), ClientMovementRequest.class).getDirections();
                 updateButtons(availableDirections);
 
+                running = stats.isAlive();
+                if (!running){
+                    textArea.appendText("You are dead now, gg.");
+                    this.close(false);
+                    break;
+                }
                 //waits turn to end.
                 Thread.sleep(7000);
                 textArea.appendText("3...\n");
@@ -138,11 +144,12 @@ public class ServerCommunicator implements Runnable {
                 System.out.println(directionHolder.getDirection());
                 dos.writeInt(1);
                 dos.writeUTF(gson.toJson(directionHolder.getDirection()));
-                running = stats.isAlive();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        textArea.appendText("Close the window.");
+        buttons.disableAll();
     }
 
     private void scoutAround(boolean[][] cordMatrix, DirectionHolder directionHolder) {
@@ -159,6 +166,10 @@ public class ServerCommunicator implements Runnable {
 
     public void stopRunning() {
         this.running = false;
+    }
+
+    public boolean isRunning(){
+        return running;
     }
 
     private void updateButtons(List<String> directions) {

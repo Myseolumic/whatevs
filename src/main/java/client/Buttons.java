@@ -99,4 +99,16 @@ public class Buttons {
     public void disableRight() {
         right.disableProperty().set(true);
     }
+
+    public void disableAll() {
+        disableUp();
+        disableRight();
+        disableLeft();
+        disableDown();
+        stop.disableProperty().set(true);
+        drop1.disableProperty().set(true);
+        drop2.disableProperty().set(true);
+        drop3.disableProperty().set(true);
+        drop4.disableProperty().set(true);
+    }
 }

@@ -113,9 +113,12 @@ public class Main extends Application {
 
         primaryStage.setOnCloseRequest(event -> {
             try {
-                comm.close();
-                comm.stopRunning();
-                ioThread.interrupt();
+                if (comm.isRunning()){
+                    comm.close(true);
+                    comm.stopRunning();
+                    ioThread.interrupt();
+                }
+                Platform.exit();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
