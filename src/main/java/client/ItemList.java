@@ -10,53 +10,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemList {
-    private List<Item> itemArray = new ArrayList<>();
+    private Item[] itemArray = new Item[4];
     private GridPane itemGridPane;
 
     public ItemList(GridPane itemGridPane) {
         this.itemGridPane = itemGridPane;
     }
 
+    private static void placeItem(Item item, GridPane itemsGridPane, int i) {
+        Platform.runLater(() -> {
+            itemsGridPane.add(new ImageView(new Image(item.getResourcePath())), i, 0);
+        });
+    }
+
+    private static void displaceItem(GridPane itemsGridPane, Item [] itemArray, int place) {
+        Platform.runLater(() -> {
+            itemsGridPane.add(new ImageView(new Image("TileSprites/inventorySlot.png")),place, 0);
+            itemArray[place] = null;
+        });
+    }
+
     public void addItem(Item item, GridPane itemsGridPane, PlayerStats player) {
-        if (itemArray.size() < 5) {
-            itemArray.add(item);
-            item.getBonus(player);
-            placeItem(item, itemsGridPane, itemArray);
-        } else {
-            System.out.println("Su inventory on täis");
+        for (int i = 0; i < itemArray.length; i++) {
+            System.out.println(itemArray[i]);
+            if (itemArray[i] == null){
+                itemArray[i] = item;
+                item.getBonus(player);
+                placeItem(item, itemsGridPane, i);
+                break;
+            }
         }
     }
 
-    private static void placeItem(Item item, GridPane itemsGridPane, List<Item> itemArray) {
-        Platform.runLater(() -> {
-            itemsGridPane.add(new ImageView(new Image(item.getResourcePath())), itemArray.size() - 1, 0);
-        });
-    }
-
-
-    public void removeItem(GridPane itemsGridPane, PlayerStats player) {
-        if (itemArray.size() > 0) {
-            displaceItem(itemsGridPane, itemArray);
-            itemArray.get(itemArray.size()-1).removeBonus(player);
+    public void removeItem(GridPane itemsGridPane, PlayerStats player, int place) {
+        if (itemArray[place] != null) {
+            displaceItem(itemsGridPane, itemArray, place);
+            itemArray[place].removeBonus(player);
         }
-    }
-
-    private static void displaceItem(GridPane itemsGridPane, List<Item> itemArray) {
-        Platform.runLater(() -> {
-            itemsGridPane.add(new ImageView(new Image("TileSprites/inventorySlot.png")), itemArray.size() - 1, 0);
-            itemArray.remove(itemArray.size() - 1);
-        });
     }
 
     public GridPane getItemGridPane() {
         return itemGridPane;
     }
 
-    public Item getItem() {
-            return itemArray.get(itemArray.size() - 1);
-    }
-
     public int getSize() {
-        return itemArray.size();
+        return itemArray.length;
+    }
+    public Item[] getItemArray(){
+        return itemArray;
     }
 }

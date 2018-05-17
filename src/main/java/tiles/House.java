@@ -23,8 +23,11 @@ public class House implements Tile {
             switch (randomEvent) {
                 case 1://trap
                     player.setHealth(player.getHealth() - 5);
-                    if (itemList.getSize() > 0) {
-                        itemList.removeItem(itemList.getItemGridPane(), player);
+                    for (int i = 0; i < itemList.getSize(); i++) {
+                        if (itemList.getItemArray()[i] != null && ( i == itemList.getSize()-1 || itemList.getItemArray()[i+1] == null)) {
+                            itemList.removeItem(itemList.getItemGridPane(), player, i);
+                            break;
+                        }
                     }
                     event = "A shotgun triggered as you opened the door. Took 5 damage. " + (roomsUnchecked - 1) + " rooms unchecked.";
                     break;
@@ -54,9 +57,9 @@ public class House implements Tile {
 
     @Override
     public void activate() {
-        if(!isActivated) {
-            roomsUnchecked-=1;
-            if(roomsUnchecked == 0) {
+        if (!isActivated) {
+            roomsUnchecked -= 1;
+            if (roomsUnchecked == 0) {
                 isActivated = true;
             }
         }
