@@ -141,7 +141,6 @@ public class ServerCommunicator implements Runnable {
                     cordMatrix[player.getX()+j][player.getY()+i] = true;
                 }
             }
-            System.out.println("Scouted");
         }
     }
 
