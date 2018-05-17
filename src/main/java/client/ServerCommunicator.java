@@ -66,10 +66,13 @@ public class ServerCommunicator implements Runnable {
             statLabels.setPortraitPath(stats.getPortraitPath());
             statLabels.setName(stats.getName(), stats.getAnimalClass());
             statLabels.setDamage(String.valueOf(stats.getDmg()));
+
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
             boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
             DirectionHolder directionHolder = new DirectionHolder();
+
             buttons.init(textArea, directionHolder,itemslots,stats);
+
             int turn = 0;
             Map.visualizeMap(mapArea, mapTiles, cordMatrix);
 
@@ -94,13 +97,22 @@ public class ServerCommunicator implements Runnable {
 
                 directionHolder.setDirection(Direction.STOP);
                 player = gson.fromJson(dis.readUTF(), Player.class);
+                boolean isUsed = dis.readBoolean();
                 System.out.println("Your turn has started.");
+
                 Tile currentTile = mapTiles[player.getX()][player.getY()];
+                if (isUsed){
+                    currentTile.activate();
+                }
                 String eventInfo = currentTile.enteredTile(stats,itemslots);
                 textArea.appendText(eventInfo+"\n");
-                currentTile.activate();
+                if (!isUsed){
+                    currentTile.activate();
+                }
+
                 statLabels.setHp(String.valueOf(stats.getHealth()),String.valueOf(stats.getMaxHealth()),stats.isAlive());
                 statLabels.setDamage(String.valueOf(stats.getDmg()));
+
                 cordMatrix[player.getX()][player.getY()] = true;
                 Map.visualizeMap(mapArea, mapTiles, cordMatrix);
                 Map.placePlayer(mapArea, player);

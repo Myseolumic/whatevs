@@ -3,24 +3,27 @@ package server;
 public class Player implements Moveable {
 
     private final int id;
-    private int x,y;
+    private int x, y;
 
-    public Player(int id, int x, int y){
+    public Player(int id, int x, int y) {
         this.id = id;
         this.x = x;
         this.y = y;
     }
 
+    public int getId() {
+        return id;
+    }
 
-    public void modX(int value){
+    public void modX(int value) {
         this.x += value;
     }
 
-    public void modY(int value){
+    public void modY(int value) {
         this.y += value;
     }
 
-    public int getX(){
+    public int getX() {
         return x;
     }
 
