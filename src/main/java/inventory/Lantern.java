@@ -11,7 +11,7 @@ public class Lantern implements Item {
 
     @Override
     public String getResourcePath() {
-        return "Items/pewpew.png";
+        return "Items/lantern.png";
     }
 
     @Override

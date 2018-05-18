@@ -99,10 +99,10 @@ public class ServerCommunicator implements Runnable {
                 System.out.println("Your turn has started.");
 
                 Tile currentTile = mapTiles[player.getX()][player.getY()];
+                String eventInfo = currentTile.enteredTile(stats,itemslots);
                 if (isUsed){
                     currentTile.activate();
                 }
-                String eventInfo = currentTile.enteredTile(stats,itemslots);
                 textArea.appendText(eventInfo+"\n");
                 if (!isUsed){
                     currentTile.activate();

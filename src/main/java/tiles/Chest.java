@@ -12,27 +12,27 @@ public class Chest implements Tile {
         return "TileSprites/chest.png";
     }
 
+    static Item getItem() {
+        int randomEvent = (int) Math.ceil(Math.random() * 3);
+        Item loot;
+        if (randomEvent == 1)
+            loot = new Lantern();
+        else if (randomEvent == 2)
+            loot = new Pistol();
+        else
+            loot = new Kevlar();
+        return loot;
+    }
+
     @Override
     public String enteredTile(PlayerStats player, ItemList itemList) {
         if (!isActivated) {
-            int randomEvent = (int) Math.ceil(Math.random() * 3);
-            Item loot;
-            if (randomEvent == 1)
-                loot = new Lantern();
-            else if (randomEvent == 2)
-                loot = new Pistol();
-            else
-                loot = new Kevlar();
-
+            Item loot = Chest.getItem();
             itemList.addItem(loot, itemList.getItemGridPane(), player);
             return "Oh sweet baby jesus! Someone left their goods behind. You found " + loot.getName() + ".";
-        } else
-
-        {
+        } else {
             return "You see before you a ravaged bag of goodies. It's empty.";
         }
-
-
     }
 
     @Override

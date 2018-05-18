@@ -10,7 +10,7 @@ public class Pistol implements Item {
 
     @Override
     public String getResourcePath() {
-        return null;
+        return "Items/pewpew.png";
     }
 
     @Override

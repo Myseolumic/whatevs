@@ -1,7 +1,6 @@
 package tiles;
 
-import inventory.Item;
-import inventory.TestItem;
+import inventory.*;
 import client.ItemList;
 import client.PlayerStats;
 
@@ -23,16 +22,10 @@ public class House implements Tile {
             switch (randomEvent) {
                 case 1://trap
                     player.setHealth(player.getHealth() - 5);
-                    for (int i = 0; i < itemList.getSize(); i++) {
-                        if (itemList.getItemArray()[i] != null && ( i == itemList.getSize()-1 || itemList.getItemArray()[i+1] == null)) {
-                            itemList.removeItem(itemList.getItemGridPane(), player, i);
-                            break;
-                        }
-                    }
                     event = "A shotgun triggered as you opened the door. Took 5 damage. " + (roomsUnchecked - 1) + " rooms unchecked.";
                     break;
                 case 2://loot
-                    Item loot = new TestItem();
+                    Item loot = Chest.getItem();
                     itemList.addItem(loot, itemList.getItemGridPane(), player);
                     event = "You see Walmart bags in the corner. Found " + loot.getName() + "! " + (roomsUnchecked - 1) + " rooms unchecked.";
                     break;
