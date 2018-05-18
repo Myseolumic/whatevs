@@ -6,11 +6,12 @@ public class Lantern implements Item {
     @Override
     public void getBonus(PlayerStats player) {
         // show tiles around you
+
     }
 
     @Override
     public String getResourcePath() {
-        return null;
+        return "Items/pewpew.png";
     }
 
     @Override

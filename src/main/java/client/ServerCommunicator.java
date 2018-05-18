@@ -120,7 +120,8 @@ public class ServerCommunicator implements Runnable {
                 if (!running) {
                     break;
                 }
-                scoutAround(cordMatrix, directionHolder);
+
+                scoutAround(cordMatrix, directionHolder, mapTiles, stats);
                 textArea.appendText("--------------------------------------------------\n\n");
 
                 System.out.println(directionHolder.getDirection());
@@ -133,12 +134,16 @@ public class ServerCommunicator implements Runnable {
         }
     }
 
-    private void scoutAround(boolean[][] cordMatrix, DirectionHolder directionHolder) {
-        if(directionHolder.getDirection().equals(Direction.STOP)) {
+    private void scoutAround(boolean[][] cordMatrix, DirectionHolder directionHolder, Tile [][] mapTiles, PlayerStats stats) {
+        if(directionHolder.getDirection().equals(Direction.STOP) || itemslots.hasLatern()) {
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
                     if(player.getY()+i >= 0 && player.getY() < cordMatrix.length && player.getX()+j >= 0 && player.getX()+j < cordMatrix.length)
                     cordMatrix[player.getX()+j][player.getY()+i] = true;
+                }  if (itemslots.hasLatern()){
+                    Map.visualizeMap(mapArea, mapTiles, cordMatrix); // MIKS TA SIIN EI UUENDA MAP'I  (TEEB ÜMBEROLEVAD RUUDUD KA NÄHTAVAKS)
+                    itemslots.removeLatern(stats);
+
                 }
             }
             System.out.println("Scouted");

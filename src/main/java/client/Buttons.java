@@ -51,29 +51,16 @@ public class Buttons {
             directionHolder.setDirection(Direction.STOP);
         });
         drop1.setOnAction(event -> {
-            if (itemList.getItemArray()[0] != null) {
-                target.appendText("You just dropped **** item.\n");
-                itemList.removeItem(itemList.getItemGridPane(), player,0);
-            }
+            dropFunction(target,itemList,player,0);
         });
         drop2.setOnAction(event -> {
-            if (itemList.getItemArray()[1] != null) {
-                target.appendText("You just dropped **** item.\n");
-                itemList.removeItem(itemList.getItemGridPane(), player,1);
-            }
+            dropFunction(target,itemList,player,1);
         });
         drop3.setOnAction(event -> {
-            if (itemList.getItemArray()[2] != null) {
-                target.appendText(itemList.getSize()+ "");
-                target.appendText("You just dropped **** item.\n");
-                itemList.removeItem(itemList.getItemGridPane(), player,2);
-            }
+            dropFunction(target,itemList,player,2);
         });
         drop4.setOnAction(event -> {
-            if (itemList.getItemArray()[3] != null) {
-                target.appendText("You just dropped **** item.\n");
-                itemList.removeItem(itemList.getItemGridPane(), player,3);
-            }
+            dropFunction(target,itemList,player,3);
         });
     }
 
@@ -98,5 +85,12 @@ public class Buttons {
 
     public void disableRight() {
         right.disableProperty().set(true);
+    }
+
+    private void dropFunction(TextArea target, ItemList itemList, PlayerStats player,int place){
+        if (itemList.getItemArray()[place] != null) {
+            target.appendText("You just dropped **** item.\n");
+            itemList.removeItem(itemList.getItemGridPane(), player,place);
+        }
     }
 }

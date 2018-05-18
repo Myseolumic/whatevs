@@ -23,9 +23,9 @@ public class ItemList {
         });
     }
 
-    private static void displaceItem(GridPane itemsGridPane, Item [] itemArray, int place) {
+    private static void displaceItem(GridPane itemsGridPane, Item[] itemArray, int place) {
         Platform.runLater(() -> {
-            itemsGridPane.add(new ImageView(new Image("TileSprites/inventorySlot.png")),place, 0);
+            itemsGridPane.add(new ImageView(new Image("TileSprites/inventorySlot.png")), place, 0);
             itemArray[place] = null;
         });
     }
@@ -33,7 +33,7 @@ public class ItemList {
     public void addItem(Item item, GridPane itemsGridPane, PlayerStats player) {
         for (int i = 0; i < itemArray.length; i++) {
             System.out.println(itemArray[i]);
-            if (itemArray[i] == null){
+            if (itemArray[i] == null) {
                 itemArray[i] = item;
                 item.getBonus(player);
                 placeItem(item, itemsGridPane, i);
@@ -56,7 +56,30 @@ public class ItemList {
     public int getSize() {
         return itemArray.length;
     }
-    public Item[] getItemArray(){
+
+    public Item[] getItemArray() {
         return itemArray;
     }
+
+    public boolean hasLatern() {
+        for (Item item : itemArray) {
+            if (item != null) {
+                if (item.getName().equals("really light latern")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void removeLatern(PlayerStats player) {
+        for (int i = 0; i < itemArray.length; i++) {
+            if (itemArray[i] != null) {
+                if (itemArray[i].getName().equals("really light latern")) {
+                    removeItem(itemGridPane, player, i);
+                }
+            }
+        }
+    }
 }
+
