@@ -1,6 +1,6 @@
 package server;
 
-public class Player implements Moveable {
+public class Player {
 
     private final int id;
     private int x, y;
@@ -31,8 +31,7 @@ public class Player implements Moveable {
         return y;
     }
 
-    @Override
     public String getResourcePath() {
-        return "TileSprites/Playertest.png";
+        return "TileSprites/hedgehogPort.png";
     }
 }
