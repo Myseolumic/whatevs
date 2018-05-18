@@ -47,37 +47,38 @@ public class ServerCommunicator implements Runnable {
         this.statLabels = statLabels;
     }
 
-    public void close() throws IOException {
+    public void close(boolean quit) throws IOException {
         dos.writeInt(404);
         dos.writeUTF("Client ragequit.");
         dis.close();
         dos.close();
         serverSocket.close();
-        Platform.exit();
+        if (quit) Platform.exit();
     }
 
     @Override
     public void run() {
         try {
             Gson gson = new Gson();
-
-
             PlayerStats stats = createStats("Jaanus");
             statLabels.setPortraitPath(stats.getPortraitPath());
             statLabels.setName(stats.getName(), stats.getAnimalClass());
             statLabels.setDamage(String.valueOf(stats.getDmg()));
+
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
             boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
             DirectionHolder directionHolder = new DirectionHolder();
+
             buttons.init(textArea, directionHolder,itemslots,stats);
+
             int turn = 0;
             Map.visualizeMap(mapArea, mapTiles, cordMatrix);
 
             textField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
-                        dos.writeInt(0);
-                        dos.writeUTF(textField.getText());
+                        //dos.writeInt(0);
+                        //dos.writeUTF(textField.getText());
                         textArea.appendText(textField.getText());
                         textField.setText("");
                     } catch (Exception e) {
@@ -87,20 +88,29 @@ public class ServerCommunicator implements Runnable {
             });
 
             while (running) {
-                /*turn+=1;
-                if(turn%5 == 0) {
+                turn+=1;
+                if(turn%6 == 0) {
                     mapTiles = Map.reduceMapSize(mapTiles);
-                }*/
+                }
 
                 directionHolder.setDirection(Direction.STOP);
                 player = gson.fromJson(dis.readUTF(), Player.class);
+                boolean isUsed = dis.readBoolean();
                 System.out.println("Your turn has started.");
+
                 Tile currentTile = mapTiles[player.getX()][player.getY()];
+                if (isUsed){
+                    currentTile.activate();
+                }
                 String eventInfo = currentTile.enteredTile(stats,itemslots);
                 textArea.appendText(eventInfo+"\n");
-                currentTile.activate();
+                if (!isUsed){
+                    currentTile.activate();
+                }
+
                 statLabels.setHp(String.valueOf(stats.getHealth()),String.valueOf(stats.getMaxHealth()),stats.isAlive());
                 statLabels.setDamage(String.valueOf(stats.getDmg()));
+
                 cordMatrix[player.getX()][player.getY()] = true;
                 Map.visualizeMap(mapArea, mapTiles, cordMatrix);
                 Map.placePlayer(mapArea, player);
@@ -109,6 +119,12 @@ public class ServerCommunicator implements Runnable {
                 List<String> availableDirections = gson.fromJson(dis.readUTF(), ClientMovementRequest.class).getDirections();
                 updateButtons(availableDirections);
 
+                running = stats.isAlive();
+                if (!running){
+                    textArea.appendText("You are dead now, gg.");
+                    this.close(false);
+                    break;
+                }
                 //waits turn to end.
                 Thread.sleep(7000);
                 textArea.appendText("3...\n");
@@ -127,11 +143,12 @@ public class ServerCommunicator implements Runnable {
                 System.out.println(directionHolder.getDirection());
                 dos.writeInt(1);
                 dos.writeUTF(gson.toJson(directionHolder.getDirection()));
-                running = stats.isAlive();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        textArea.appendText("Close the window.");
+        buttons.disableAll();
     }
 
     private void scoutAround(boolean[][] cordMatrix, DirectionHolder directionHolder, Tile [][] mapTiles, PlayerStats stats) {
@@ -146,12 +163,15 @@ public class ServerCommunicator implements Runnable {
 
                 }
             }
-            System.out.println("Scouted");
         }
     }
 
     public void stopRunning() {
         this.running = false;
+    }
+
+    public boolean isRunning(){
+        return running;
     }
 
     private void updateButtons(List<String> directions) {

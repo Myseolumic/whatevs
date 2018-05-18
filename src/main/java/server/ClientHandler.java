@@ -1,10 +1,12 @@
 package server;
 
 import com.google.gson.Gson;
+import common.ClientAction;
 import common.ClientMovementRequest;
 import common.Direction;
 import common.MapData;
 import javafx.application.Platform;
+import jdk.nashorn.internal.ir.Block;
 import tiles.Tile;
 
 import java.io.DataInputStream;
@@ -20,8 +22,8 @@ import java.util.concurrent.Semaphore;
 public class ClientHandler implements Runnable {
 
     private Socket clientSocket;
-    private BlockingQueue<Boolean> turnFinished;
-    private BlockingQueue<Player> playerLocation;
+    private BlockingQueue<ClientAction> turnFinished;
+    private BlockingQueue<Boolean> serverQueue;
     private CountDownLatch cdl;
     private final Semaphore semaphore;
     private Gson gson;
@@ -32,10 +34,10 @@ public class ClientHandler implements Runnable {
     private boolean clientDisconnected;
 
     public ClientHandler(Socket clientSocket, Gson gson, Tile[][] map, Player location,
-                         BlockingQueue<Boolean> turnFinished,
-                         BlockingQueue<Player> playerLocation,
+                         BlockingQueue<ClientAction> turnFinished,
                          CountDownLatch cdl,
-                         Semaphore semaphore
+                         Semaphore semaphore,
+                         BlockingQueue<Boolean> serverQueue
     ) throws IOException {
         this.clientSocket = clientSocket;
         this.dis = new DataInputStream(clientSocket.getInputStream());
@@ -45,10 +47,10 @@ public class ClientHandler implements Runnable {
         this.map = map;
         this.clientDisconnected = false;
         this.turnFinished = turnFinished;
-        this.playerLocation = playerLocation;
         this.cdl = cdl;
         this.semaphore = semaphore;
         this.location = location;
+        this.serverQueue = serverQueue;
     }
 
     @Override
@@ -66,24 +68,30 @@ public class ClientHandler implements Runnable {
             dos.writeUTF(gson.toJson(new MapData(mapString)));
             System.out.println("Sent mapString.");
             cdl.await();
+            boolean isVisited = false;
             while (!clientDisconnected) {
                 dos.writeUTF(gson.toJson(location));
+                dos.writeBoolean(isVisited);
                 List<String> availableDirections = processMap(map, location);
                 dos.writeUTF(gson.toJson(new ClientMovementRequest(availableDirections)));
                 processInput(dis.readInt(), dis.readUTF());
+                isVisited = isNextTileVisited();
                 semaphore.acquire(); //wait for other players to finish
             }
         } catch (InterruptedException e){
             System.err.println("Shutting down ClientHandler for port: "+clientSocket.getPort());
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        } catch (IOException e) { //incase connnection with client is lost.
+            try {
+                turnFinished.put(new ClientAction(true, location));
+            } catch (InterruptedException f) {
+                e.printStackTrace();
+                f.printStackTrace();
+            }
         }
     }
 
     private void processInput(int id, String str) throws IOException, InterruptedException {
-        if (id == 0) { //text
-            System.out.println("[Client]: " + str); //move this to a seperate thread.
-        }
         if (id == 1) { //movement
             Direction direction = gson.fromJson(str, Direction.class);
             switch (direction){
@@ -103,13 +111,17 @@ public class ClientHandler implements Runnable {
                     location.modX(1);
                     break;
             }
-            turnFinished.put(true);
+            turnFinished.put(new ClientAction(true, location));
         }
         if (id == 404) {
             System.out.println(str);
-            turnFinished.put(false);
+            turnFinished.put(new ClientAction(false, location));
             this.close();
         }
+    }
+
+    private boolean isNextTileVisited() throws InterruptedException {
+        return serverQueue.take();
     }
 
     private void close() throws IOException {
