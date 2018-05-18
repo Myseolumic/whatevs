@@ -80,8 +80,14 @@ public class ClientHandler implements Runnable {
             }
         } catch (InterruptedException e){
             System.err.println("Shutting down ClientHandler for port: "+clientSocket.getPort());
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        } catch (IOException e) { //incase connnection with client is lost.
+            try {
+                turnFinished.put(new ClientAction(true, location));
+            } catch (InterruptedException f) {
+                e.printStackTrace();
+                f.printStackTrace();
+            }
         }
     }
 
