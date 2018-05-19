@@ -5,13 +5,11 @@ import javafx.scene.control.Label;
 
 public class StatLabels {
 
-    private String portraitPath;
     private Label name;
     private Label hp;
     private Label damage;
 
-    public StatLabels(Label name, Label hp, Label damage, String portraitPath) {
-        this.portraitPath = portraitPath;
+    public StatLabels(Label name, Label hp, Label damage) {
         this.name = name;
         this.hp = hp;
         this.damage = damage;
@@ -41,7 +39,4 @@ public class StatLabels {
         );
     }
 
-    public void setPortraitPath(String portraitPath) {
-        this.portraitPath = portraitPath;
-    }
 }

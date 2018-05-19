@@ -11,14 +11,37 @@ public class PlayerStats {
     private boolean isAlive = true;
 
 
-    public PlayerStats(String name, String animalClass,String portraitPath, int Health, int dmg, int defence) {
-        this.portraitPath = portraitPath;
-        this.name = name;
-        this.animalClass = animalClass;
-        this.health = Health;
-        this.maxHealth = Health;
-        this.dmg = dmg;
-        this.defence = defence;
+    public PlayerStats() {
+        String[] names = {"Sofia", "Maria", "Alisa", "Anna", "Arina", "Eliise", "Adeele", "Lenna", "Aleksandra", "Mia", "Robin", "Rasmus", "Artjom", "Artur", "Daniel", "Robert", "Oliver", "Maksim", "Oskar", "Sebastian"};
+        int randomName = (int) Math.floor(Math.random() * names.length);
+        this.name = names[randomName];
+
+        String[] classes = {"Hedgehog", "Moose", "Wolf"};
+        int randomClass = (int) Math.floor(Math.random() * classes.length);
+        this.animalClass = classes[randomClass];
+        switch (randomClass) {
+            case 0:
+                this.dmg = 5;
+                this.health = 14;
+                this.maxHealth = 14;
+                this.portraitPath = "TileSprites/hedgehog.png";
+                this.defence = 6;
+                break;
+            case 1:
+                this.dmg = 4;
+                this.health = 20;
+                this.maxHealth = 20;
+                this.portraitPath = "TileSprites/moose.png";
+                this.defence = 5;
+                break;
+            case 2:
+                this.dmg = 7;
+                this.health = 10;
+                this.maxHealth = 10;
+                this.portraitPath = "TileSprites/wolf.png";
+                this.defence = 3;
+                break;
+        }
     }
 
     public String getName() {

@@ -18,7 +18,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.List;
 
 public class ServerCommunicator implements Runnable {
@@ -29,6 +28,7 @@ public class ServerCommunicator implements Runnable {
     private Buttons buttons;
     private StatLabels statLabels;
     private Player player;
+    private PlayerStats stats;
     private DataInputStream dis;
     private DataOutputStream dos;
     private volatile boolean running = true;
@@ -39,7 +39,7 @@ public class ServerCommunicator implements Runnable {
         this.serverSocket = new Socket("127.0.0.1", 1337);
         this.dis = new DataInputStream(serverSocket.getInputStream());
         this.dos = new DataOutputStream(serverSocket.getOutputStream());
-
+        this.stats = new PlayerStats();
         this.mapArea = mapArea;
         this.textArea = textArea;
         this.textField = textField;
@@ -56,12 +56,14 @@ public class ServerCommunicator implements Runnable {
         if (quit) Platform.exit();
     }
 
+    public PlayerStats getStats() {
+        return stats;
+    }
+
     @Override
     public void run() {
         try {
             Gson gson = new Gson();
-            PlayerStats stats = createStats("Jaanus");
-            statLabels.setPortraitPath(stats.getPortraitPath());
             statLabels.setName(stats.getName(), stats.getAnimalClass());
             statLabels.setDamage(String.valueOf(stats.getDmg()));
 
@@ -192,32 +194,5 @@ public class ServerCommunicator implements Runnable {
         }
     }
 
-    private PlayerStats createStats(String name) {
-        List<String> classes = Arrays.asList("Hedgehog", "Giraffe", "Wolf");
-        int damage=0;
-        int health=0;
-        int defence = 0;
-        String portraitPath = "";
-        int randomClass = 0; //(int) Math.floor(Math.random()*classes.size());
-        switch(randomClass) {
-            case 0:
-                damage = 5;
-                health = 14;
-                portraitPath = "TileSprites/hedgehog.png";
-                defence = 6;
-                break;
-            case 1:
-                damage = 4;
-                health = 20;
-                damage = 5;
-                break;
-            case 2:
-                damage = 7;
-                health = 10;
-                defence = 3;
-                break;
-        }
 
-        return new PlayerStats(name, classes.get(randomClass),portraitPath,health, damage,defence);
-    }
 }

@@ -53,8 +53,8 @@ public class Main extends Application {
         Label name = new Label();
         Label hpBar = new Label();
         Label damage = new Label();
-        String picturePath="TileSprites/hedgehog.png";
-        StatLabels info = new StatLabels(name, hpBar, damage, picturePath);
+        StatLabels info = new StatLabels(name, hpBar, damage);
+        String picturePath= "TileSprites/moose.png"; // gotta get that picture from server communicator yoyo
         ImageView character = new ImageView(new Image(picturePath));
         VBox stats = new VBox();
         GridPane statsAndPortrait = new GridPane();
@@ -62,6 +62,7 @@ public class Main extends Application {
         statsAndPortrait.add(character,0 ,0);
         statsAndPortrait.add(stats,0,0);
         topRight.setCenter(statsAndPortrait);
+
 
 
         GridPane midRight = new GridPane();
@@ -110,6 +111,7 @@ public class Main extends Application {
             Platform.exit();
             return; // comm.close() viskab näkku muidu
         }
+
 
         primaryStage.setOnCloseRequest(event -> {
             try {
