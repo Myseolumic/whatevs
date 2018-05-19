@@ -54,14 +54,14 @@ public class Main extends Application {
         Label hpBar = new Label();
         Label damage = new Label();
         StatLabels info = new StatLabels(name, hpBar, damage);
-        String picturePath= "TileSprites/moose.png"; // gotta get that picture from server communicator yoyo
-        ImageView character = new ImageView(new Image(picturePath));
+        ImageView character = new ImageView(new Image("TileSprites/characterPortrait.png"));
         VBox stats = new VBox();
         GridPane statsAndPortrait = new GridPane();
         stats.getChildren().addAll(name, hpBar, damage);
         statsAndPortrait.add(character,0 ,0);
         statsAndPortrait.add(stats,0,0);
         topRight.setCenter(statsAndPortrait);
+        StatsAndPort portrait = new StatsAndPort(statsAndPortrait, stats);
 
 
 
@@ -103,7 +103,7 @@ public class Main extends Application {
         ServerCommunicator comm;
         Thread ioThread;
         try {
-            comm = new ServerCommunicator(map, textArea, textField, buttons, info, inventoryArray);
+            comm = new ServerCommunicator(map, textArea, textField, buttons, info, portrait, inventoryArray);
             ioThread = new Thread(comm);
             ioThread.start();
         } catch (ConnectException e) {

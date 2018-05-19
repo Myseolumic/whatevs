@@ -48,7 +48,7 @@ public class Buttons {
         });
         stop.setOnAction(event -> {
             target.appendText("You will scout the area around you next turn.\n");
-            directionHolder.setDirection(Direction.STOP);
+            directionHolder.setDirection(Direction.SEARCH);
         });
         drop1.setOnAction(event -> {
             dropFunction(target,itemList,player,0);

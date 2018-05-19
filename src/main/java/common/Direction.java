@@ -5,5 +5,6 @@ public enum Direction {
     DOWN,
     LEFT,
     RIGHT,
+    SEARCH,
     STOP
 }

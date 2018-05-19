@@ -8,6 +8,7 @@ import common.MapData;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import server.Map;
@@ -34,12 +35,13 @@ public class ServerCommunicator implements Runnable {
     private volatile boolean running = true;
     private ItemList itemslots;
 
-    public ServerCommunicator(GridPane mapArea, TextArea textArea, TextField textField, Buttons buttons, StatLabels statLabels, ItemList itemslots) throws Exception {
+    public ServerCommunicator(GridPane mapArea, TextArea textArea, TextField textField, Buttons buttons, StatLabels statLabels, StatsAndPort portrait, ItemList itemslots) throws Exception {
         this.itemslots = itemslots;
         this.serverSocket = new Socket("127.0.0.1", 1337);
         this.dis = new DataInputStream(serverSocket.getInputStream());
         this.dos = new DataOutputStream(serverSocket.getOutputStream());
         this.stats = new PlayerStats();
+        portrait.setImage(new ImageView(stats.getPortraitPath()));
         this.mapArea = mapArea;
         this.textArea = textArea;
         this.textField = textField;
@@ -56,9 +58,6 @@ public class ServerCommunicator implements Runnable {
         if (quit) Platform.exit();
     }
 
-    public PlayerStats getStats() {
-        return stats;
-    }
 
     @Override
     public void run() {
@@ -139,7 +138,7 @@ public class ServerCommunicator implements Runnable {
                     break;
                 }
 
-                scoutAround(cordMatrix, directionHolder, mapTiles, stats);
+                scoutAround(cordMatrix, directionHolder, stats);
                 textArea.appendText("--------------------------------------------------\n\n");
 
                 System.out.println(directionHolder.getDirection());
@@ -153,18 +152,15 @@ public class ServerCommunicator implements Runnable {
         buttons.disableAll();
     }
 
-    private void scoutAround(boolean[][] cordMatrix, DirectionHolder directionHolder, Tile [][] mapTiles, PlayerStats stats) {
-        if(directionHolder.getDirection().equals(Direction.STOP) || itemslots.hasLatern()) {
+    private void scoutAround(boolean[][] cordMatrix, DirectionHolder directionHolder, PlayerStats stats) {
+        if(directionHolder.getDirection().equals(Direction.SEARCH) || itemslots.hasLatern()) {
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
                     if(player.getY()+i >= 0 && player.getY() < cordMatrix.length && player.getX()+j >= 0 && player.getX()+j < cordMatrix.length)
                     cordMatrix[player.getX()+j][player.getY()+i] = true;
-                }  if (itemslots.hasLatern()){
-                    Map.visualizeMap(mapArea, mapTiles, cordMatrix); // MIKS TA SIIN EI UUENDA MAP'I  (TEEB ÜMBEROLEVAD RUUDUD KA NÄHTAVAKS)
-                    itemslots.removeLatern(stats);
-
                 }
             }
+            itemslots.removeLatern(stats);
         }
     }
 
