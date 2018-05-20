@@ -1,10 +1,8 @@
 package server;
 
+import battle.Battle;
 import com.google.gson.Gson;
-import common.ClientAction;
-import common.ClientMovementRequest;
-import common.Direction;
-import common.MapData;
+import common.*;
 import javafx.application.Platform;
 import jdk.nashorn.internal.ir.Block;
 import tiles.Tile;
@@ -23,7 +21,7 @@ public class ClientHandler implements Runnable {
 
     private Socket clientSocket;
     private BlockingQueue<ClientAction> turnFinished;
-    private BlockingQueue<Boolean> serverQueue;
+    private BlockingQueue<NextTurnData> serverQueue;
     private CountDownLatch cdl;
     private final Semaphore semaphore;
     private Gson gson;
@@ -37,7 +35,7 @@ public class ClientHandler implements Runnable {
                          BlockingQueue<ClientAction> turnFinished,
                          CountDownLatch cdl,
                          Semaphore semaphore,
-                         BlockingQueue<Boolean> serverQueue
+                         BlockingQueue<NextTurnData> serverQueue
     ) throws IOException {
         this.clientSocket = clientSocket;
         this.dis = new DataInputStream(clientSocket.getInputStream());
@@ -66,16 +64,28 @@ public class ClientHandler implements Runnable {
             }
 
             dos.writeUTF(gson.toJson(new MapData(mapString)));
+            Battle battle = null;
             System.out.println("Sent mapString.");
             cdl.await();
             boolean isVisited = false;
             while (!clientDisconnected) {
                 dos.writeUTF(gson.toJson(location));
                 dos.writeBoolean(isVisited);
+                if(battle != null){
+                    dos.writeBoolean(true);
+                    dos.writeUTF(gson.toJson(battle));
+                }else{
+                    dos.writeBoolean(false);
+                }
                 List<String> availableDirections = processMap(map, location);
                 dos.writeUTF(gson.toJson(new ClientMovementRequest(availableDirections)));
                 processInput(dis.readInt(), dis.readUTF());
-                isVisited = isNextTileVisited();
+
+                //post turn
+                NextTurnData ntd = serverQueue.take();
+                isVisited = ntd.isNextVisited();
+                System.out.println(isVisited);
+                battle = ntd.getBattle();
                 semaphore.acquire(); //wait for other players to finish
             }
         } catch (InterruptedException e){
@@ -118,10 +128,6 @@ public class ClientHandler implements Runnable {
             turnFinished.put(new ClientAction(false, location));
             this.close();
         }
-    }
-
-    private boolean isNextTileVisited() throws InterruptedException {
-        return serverQueue.take();
     }
 
     private void close() throws IOException {

@@ -1,21 +1,15 @@
 package battle;
 
-import client.PlayerStats;
-import java.util.List;
+import server.Player;
 
 public class Battle {
-    List<PlayerStats> fighters;
+    private Player target;
 
-    public Battle(List<PlayerStats> fighters) {
-        this.fighters = fighters;
+    public Battle(Player target) {
+        this.target = target;
     }
-    public void addFighter(PlayerStats player){
-        fighters.add(player);
-    }
-    public void removeFighter(PlayerStats player){
-        fighters.remove(player);
-    }
-    public void attackPlayer(PlayerStats attacker, PlayerStats defender){
-        defender.setHealth(defender.getHealth()-attacker.getDmg());
+
+    public Player getTarget() {
+        return target;
     }
 }

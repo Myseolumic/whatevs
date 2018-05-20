@@ -1,7 +1,9 @@
 package server;
 
+import battle.Battle;
 import com.google.gson.Gson;
 import common.ClientAction;
+import common.NextTurnData;
 import tiles.Tile;
 
 import java.net.ServerSocket;
@@ -24,7 +26,9 @@ public class Server {
             Random rand = new Random();
 
             //java.util.concurrent stuff
-            HashMap<Integer, BlockingQueue<Boolean>> childQueues = new HashMap<>();
+            HashMap<Integer, BlockingQueue<NextTurnData>> childQueues = new HashMap<>();
+            HashMap<Integer, Player> childLocations = new HashMap<>();
+            HashMap<Integer, NextTurnData> turnDatas = new HashMap<>();
             BlockingQueue<ClientAction> clientActions = new ArrayBlockingQueue<>(4);
             CountDownLatch cdl = new CountDownLatch(1);
             Semaphore semaphore = new Semaphore(0, true);
@@ -49,7 +53,7 @@ public class Server {
                         spawnLocations[threads.size()][1]);
 
                 usedTiles[spawnLocations[threads.size()][1]][spawnLocations[threads.size()][0]] = true;
-                BlockingQueue<Boolean> childQueue = new ArrayBlockingQueue<>(1);
+                BlockingQueue<NextTurnData> childQueue = new ArrayBlockingQueue<>(1);
                 childQueues.put(threads.size(), childQueue);
 
                 Thread clientThread = new Thread(new ClientHandler(ss.accept(), gson, map, player, clientActions,
@@ -67,7 +71,9 @@ public class Server {
                     ClientAction next = clientActions.take();
                     if (next.isFinished()) {
                         int queueId = next.getLocation().getId();
-                        childQueues.get(queueId).put(isTileUsed(next.getLocation(), usedTiles));
+                        turnDatas.put(queueId, new NextTurnData(null,isTileUsed(next.getLocation(), usedTiles)));
+                        System.out.println(isTileUsed(next.getLocation(), usedTiles));
+                        childLocations.put(queueId,next.getLocation());
                         usedTiles[next.getLocation().getY()][next.getLocation().getX()] = true;
                     } else {
                         usedTiles[next.getLocation().getY()][next.getLocation().getX()] = true;
@@ -75,13 +81,28 @@ public class Server {
                         players--;
                     }
                     finishedClients++;
+
                 }
                 if (players == 0){
                     System.out.println("no more players, shutting down server.");
                     break;
                 }
+                for (Player player :childLocations.values()){
+                    for(Player other: childLocations.values()){
+                        if( player.getId() != other.getId() && player.getX() == other.getX() && player.getY() == other.getY()){
+                            System.out.println();
+                            turnDatas.get(player.getId()).setBattle(new Battle(other));
+                            turnDatas.get(other.getId()).setBattle(new Battle(player));
+                        }
+                    }
+                }
+
+                //send turndata
+                for(Integer id: turnDatas.keySet()){
+                    childQueues.get(id).put(turnDatas.get(id));
+                }
+
                 System.out.println("The turn has ended.");
-                printTileArray(usedTiles);
                 semaphore.release(players);
             }
 

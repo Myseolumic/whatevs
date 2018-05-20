@@ -4,6 +4,7 @@ public class Player {
 
     private final int id;
     private int x, y;
+    //private String type?
 
     public Player(int id, int x, int y) {
         this.id = id;

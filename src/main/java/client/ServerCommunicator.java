@@ -1,5 +1,6 @@
 package client;
 
+import battle.Battle;
 import com.google.gson.Gson;
 import common.ClientMovementRequest;
 import common.Direction;
@@ -87,7 +88,6 @@ public class ServerCommunicator implements Runnable {
                     }
                 }
             });
-
             while (running) {
                 turn+=1;
                 if(turn%6 == 0) {
@@ -96,14 +96,19 @@ public class ServerCommunicator implements Runnable {
 
                 directionHolder.setDirection(Direction.STOP);
                 player = gson.fromJson(dis.readUTF(), Player.class);
-                boolean isUsed = dis.readBoolean();
-                System.out.println("Your turn has started.");
+                boolean isUsed = dis.readBoolean(); //works
+                boolean battleHappens = dis.readBoolean();
 
+                System.out.println("Your turn has started.");
+                if (battleHappens){
+                    System.out.println("You are fighting someone else!!!");
+                    calculateDamage(gson.fromJson(dis.readUTF(), Battle.class)); //implement pls
+                }
                 Tile currentTile = mapTiles[player.getX()][player.getY()];
-                String eventInfo = currentTile.enteredTile(stats,itemslots);
                 if (isUsed){
                     currentTile.activate();
                 }
+                String eventInfo = currentTile.enteredTile(stats,itemslots);
                 textArea.appendText(eventInfo+"\n");
                 if (!isUsed){
                     currentTile.activate();
@@ -163,7 +168,10 @@ public class ServerCommunicator implements Runnable {
             itemslots.removeLatern(stats);
         }
     }
-
+    private void calculateDamage(Battle battle){
+        System.out.println(battle.getTarget());
+        //TODO: remove health etc.
+    }
     public void stopRunning() {
         this.running = false;
     }
