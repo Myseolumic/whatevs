@@ -65,6 +65,7 @@ public class ServerCommunicator implements Runnable {
             Gson gson = new Gson();
             statLabels.setName(stats.getName(), stats.getAnimalClass());
             statLabels.setDamage(String.valueOf(stats.getDmg()));
+            statLabels.setDefence(String.valueOf(stats.getDefence()));
 
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
             boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
@@ -106,7 +107,6 @@ public class ServerCommunicator implements Runnable {
                     if (itemslots.getItemArray()[i] != null) {
                         if (itemslots.getItemArray()[i].getName().equals("really light latern")) {
                             itemslots.getItemArray()[i].getBonus(stats, cordMatrix, player);
-                            System.out.println("KASUTASIN ÄRA");
                         }
                     }
                 }
@@ -122,6 +122,7 @@ public class ServerCommunicator implements Runnable {
 
                 statLabels.setHp(String.valueOf(stats.getHealth()), String.valueOf(stats.getMaxHealth()), stats.isAlive());
                 statLabels.setDamage(String.valueOf(stats.getDmg()));
+                statLabels.setDefence(String.valueOf(stats.getDefence()));
 
                 cordMatrix[player.getX()][player.getY()] = true;
                 Map.visualizeMap(mapArea, mapTiles, cordMatrix);

@@ -53,11 +53,12 @@ public class Main extends Application {
         Label name = new Label();
         Label hpBar = new Label();
         Label damage = new Label();
-        StatLabels info = new StatLabels(name, hpBar, damage);
+        Label defence = new Label();
+        StatLabels info = new StatLabels(name, hpBar, damage, defence);
         ImageView character = new ImageView(new Image("TileSprites/characterPortrait.png"));
         VBox stats = new VBox();
         GridPane statsAndPortrait = new GridPane();
-        stats.getChildren().addAll(name, hpBar, damage);
+        stats.getChildren().addAll(name, hpBar, damage,defence);
         statsAndPortrait.add(character,0 ,0);
         statsAndPortrait.add(stats,0,0);
         topRight.setCenter(statsAndPortrait);
