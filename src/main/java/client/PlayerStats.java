@@ -60,6 +60,7 @@ public class PlayerStats {
         }
         if (this.health <= 0) {
             isAlive = false;
+            this.health = 0;
         }
     }
 
