@@ -3,6 +3,7 @@ package tiles;
 import inventory.*;
 import client.ItemList;
 import client.PlayerStats;
+import server.Player;
 
 public class Chest implements Tile {
     private boolean isActivated = false;
@@ -25,10 +26,10 @@ public class Chest implements Tile {
     }
 
     @Override
-    public String enteredTile(PlayerStats player, ItemList itemList) {
+    public String enteredTile(PlayerStats stats, ItemList itemList, boolean[][] cordMatrix, Player player) {
         if (!isActivated) {
             Item loot = Chest.getItem();
-            itemList.addItem(loot, itemList.getItemGridPane(), player);
+            itemList.addItem(loot, itemList.getItemGridPane(), stats, cordMatrix, player);
             return "Oh sweet baby jesus! Someone left their goods behind. You found " + loot.getName() + ".";
         } else {
             return "You see before you a ravaged bag of goodies. It's empty.";
