@@ -30,7 +30,6 @@ public class ItemList {
 
     public void addItem(Item item, GridPane itemsGridPane, PlayerStats stats, boolean[][] cordMatrix, Player player) {
         for (int i = 0; i < itemArray.length; i++) {
-            System.out.println(itemArray[i]);
             if (itemArray[i] == null) {
                 itemArray[i] = item;
                 item.getBonus(stats, cordMatrix, player);
