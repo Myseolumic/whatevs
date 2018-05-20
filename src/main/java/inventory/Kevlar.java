@@ -1,11 +1,17 @@
 package inventory;
 
 import client.PlayerStats;
+import server.Player;
 
 public class Kevlar implements Item {
     @Override
-    public void getBonus(PlayerStats player) {
-        player.setHealth(player.getHealth() + 3);
+    public int isActive() {
+        return 0;
+    }
+
+    @Override
+    public void getBonus(PlayerStats stats, boolean[][] cordMatrix, Player player) {
+        stats.setDefence(stats.getDefence() + 3);
     }
 
     @Override
@@ -20,6 +26,6 @@ public class Kevlar implements Item {
 
     @Override
     public void removeBonus(PlayerStats playerStats) {
-        playerStats.setHealth(playerStats.getHealth()-3);
+        playerStats.setDefence(playerStats.getDefence()-3);
     }
 }

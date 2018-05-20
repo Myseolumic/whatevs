@@ -2,7 +2,7 @@ package tiles;
 
 import client.ItemList;
 import client.PlayerStats;
-import javafx.scene.layout.GridPane;
+import server.Player;
 
 public class TrashedArea implements Tile {
     @Override
@@ -11,8 +11,8 @@ public class TrashedArea implements Tile {
     }
 
     @Override
-    public String enteredTile(PlayerStats player, ItemList itemList) {
-        player.setHealth(player.getHealth() - 5);
+    public String enteredTile(PlayerStats stats, ItemList itemList, boolean[][] cordMatrix, Player player) {
+        stats.setHealth(stats.getHealth() - 5);
         return "You should not play with radioactive waste. Took 5 damage.";
     }
 

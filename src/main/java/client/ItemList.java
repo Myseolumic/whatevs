@@ -5,9 +5,7 @@ import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-
-import java.util.ArrayList;
-import java.util.List;
+import server.Player;
 
 public class ItemList {
     private Item[] itemArray = new Item[4];
@@ -30,12 +28,12 @@ public class ItemList {
         });
     }
 
-    public void addItem(Item item, GridPane itemsGridPane, PlayerStats player) {
+    public void addItem(Item item, GridPane itemsGridPane, PlayerStats stats, boolean[][] cordMatrix, Player player) {
         for (int i = 0; i < itemArray.length; i++) {
             System.out.println(itemArray[i]);
             if (itemArray[i] == null) {
                 itemArray[i] = item;
-                item.getBonus(player);
+                item.getBonus(stats, cordMatrix, player);
                 placeItem(item, itemsGridPane, i);
                 break;
             }
@@ -61,11 +59,12 @@ public class ItemList {
         return itemArray;
     }
 
-    public boolean hasLatern() {
+    public boolean hasLaternToRemove() {
         for (Item item : itemArray) {
             if (item != null) {
                 if (item.getName().equals("really light latern")) {
-                    return true;
+                    if (item.isActive() == 0)
+                        return true;
                 }
             }
         }
@@ -76,6 +75,7 @@ public class ItemList {
         for (int i = 0; i < itemArray.length; i++) {
             if (itemArray[i] != null) {
                 if (itemArray[i].getName().equals("really light latern")) {
+                    if (itemArray[i].isActive() == 0)
                     removeItem(itemGridPane, player, i);
                 }
             }

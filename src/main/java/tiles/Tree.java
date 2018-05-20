@@ -1,7 +1,7 @@
 package tiles;
 import client.ItemList;
 import client.PlayerStats;
-import javafx.scene.layout.GridPane;
+import server.Player;
 
 public class Tree implements Tile {
     @Override
@@ -11,7 +11,7 @@ public class Tree implements Tile {
 
 
     @Override
-    public String enteredTile(PlayerStats player, ItemList itemList) {
+    public String enteredTile(PlayerStats stats, ItemList itemList, boolean[][] cordMatrix, Player player) {
         return "You see trees of green... red roses too.";
     }
 
