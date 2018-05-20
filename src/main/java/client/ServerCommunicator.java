@@ -105,7 +105,7 @@ public class ServerCommunicator implements Runnable {
 
                 for (int i = 0; i < itemslots.getSize(); i++) {
                     if (itemslots.getItemArray()[i] != null) {
-                        if (itemslots.getItemArray()[i].getName().equals("really light latern")) {
+                        if (itemslots.getItemArray()[i].getName().equals("a really light latern")) {
                             itemslots.getItemArray()[i].getBonus(stats, cordMatrix, player);
                         }
                     }
@@ -138,7 +138,7 @@ public class ServerCommunicator implements Runnable {
 
                 running = stats.isAlive();
                 if (!running) {
-                    textArea.appendText("You are dead now, gg.");
+                    textArea.appendText("You are dead now, gg. ");
                     this.close(false);
                     break;
                 }
