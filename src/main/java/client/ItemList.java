@@ -6,9 +6,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ItemList {
     private Item[] itemArray = new Item[4];
     private GridPane itemGridPane;
@@ -64,7 +61,7 @@ public class ItemList {
     public boolean hasLatern() {
         for (Item item : itemArray) {
             if (item != null) {
-                if (item.getName().equals("really light latern")) {
+                if (item.getName().equals("a really light latern")) {
                     return true;
                 }
             }
@@ -75,7 +72,7 @@ public class ItemList {
     public void removeLatern(PlayerStats player) {
         for (int i = 0; i < itemArray.length; i++) {
             if (itemArray[i] != null) {
-                if (itemArray[i].getName().equals("really light latern")) {
+                if (itemArray[i].getName().equals("a really light latern")) {
                     removeItem(itemGridPane, player, i);
                 }
             }
