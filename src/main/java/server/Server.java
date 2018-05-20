@@ -72,7 +72,6 @@ public class Server {
                     if (next.isFinished()) {
                         int queueId = next.getLocation().getId();
                         turnDatas.put(queueId, new NextTurnData(null,isTileUsed(next.getLocation(), usedTiles)));
-                        System.out.println(isTileUsed(next.getLocation(), usedTiles));
                         childLocations.put(queueId,next.getLocation());
                         usedTiles[next.getLocation().getY()][next.getLocation().getX()] = true;
                     } else {
