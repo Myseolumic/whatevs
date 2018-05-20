@@ -1,5 +1,9 @@
 package client;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class PlayerStats {
     private String name;
     private String animalClass;
@@ -11,18 +15,18 @@ public class PlayerStats {
     private boolean isAlive = true;
 
 
-    public PlayerStats() {
-        setFields();
+    public PlayerStats(String animalClass) {
+        setFields(animalClass);
     }
 
-    private void setFields() {
+    private void setFields(String animalClass) {
         String[] names = {"Sofia", "Maria", "Alisa", "Anna", "Arina", "Eliise", "Adeele", "Lenna", "Aleksandra", "Mia", "Robin", "Rasmus", "Artjom", "Artur", "Daniel", "Robert", "Oliver", "Maksim", "Oskar", "Sebastian"};
         int randomName = (int) Math.floor(Math.random() * names.length);
         this.name = names[randomName];
-        String[] classes = {"Hedgehog", "Moose", "Wolf"};
-        int randomClass = (int) Math.floor(Math.random() * classes.length);
-        this.animalClass = classes[randomClass];
-        switch (randomClass) {
+        String[] possible = {"Hedgehog", "Moose", "Wolf"};
+        List<String> classes = new ArrayList<>(Arrays.asList(possible));
+
+        switch (classes.indexOf(animalClass)) {
             case 0:
                 this.dmg = 6;
                 this.health = 10;
