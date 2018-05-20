@@ -12,10 +12,13 @@ public class PlayerStats {
 
 
     public PlayerStats() {
+        setFields();
+    }
+
+    private void setFields() {
         String[] names = {"Sofia", "Maria", "Alisa", "Anna", "Arina", "Eliise", "Adeele", "Lenna", "Aleksandra", "Mia", "Robin", "Rasmus", "Artjom", "Artur", "Daniel", "Robert", "Oliver", "Maksim", "Oskar", "Sebastian"};
         int randomName = (int) Math.floor(Math.random() * names.length);
         this.name = names[randomName];
-
         String[] classes = {"Hedgehog", "Moose", "Wolf"};
         int randomClass = (int) Math.floor(Math.random() * classes.length);
         this.animalClass = classes[randomClass];
