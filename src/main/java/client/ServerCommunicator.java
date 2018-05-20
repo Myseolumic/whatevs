@@ -66,12 +66,13 @@ public class ServerCommunicator implements Runnable {
             Gson gson = new Gson();
             statLabels.setName(stats.getName(), stats.getAnimalClass());
             statLabels.setDamage(String.valueOf(stats.getDmg()));
+            statLabels.setDefence(String.valueOf(stats.getDefence()));
 
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
             boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
             DirectionHolder directionHolder = new DirectionHolder();
 
-            buttons.init(textArea, directionHolder,itemslots,stats);
+            buttons.init(textArea, directionHolder, itemslots, stats);
 
             int turn = 0;
             Map.visualizeMap(mapArea, mapTiles, cordMatrix);
@@ -89,10 +90,11 @@ public class ServerCommunicator implements Runnable {
                 }
             });
             while (running) {
-                turn+=1;
-                if(turn%6 == 0) {
+                turn += 1;
+                if (turn % 6 == 0) {
                     mapTiles = Map.reduceMapSize(mapTiles);
                 }
+
 
                 directionHolder.setDirection(Direction.STOP);
                 player = gson.fromJson(dis.readUTF(), Player.class);
@@ -105,17 +107,27 @@ public class ServerCommunicator implements Runnable {
                     calculateDamage(gson.fromJson(dis.readUTF(), Battle.class)); //implement pls
                 }
                 Tile currentTile = mapTiles[player.getX()][player.getY()];
-                if (isUsed){
+
+                for (int i = 0; i < itemslots.getSize(); i++) {
+                    if (itemslots.getItemArray()[i] != null) {
+                        if (itemslots.getItemArray()[i].getName().equals("a really light latern")) {
+                            itemslots.getItemArray()[i].getBonus(stats, cordMatrix, player);
+                        }
+                    }
+                }
+
+                if (isUsed) {
                     currentTile.activate();
                 }
-                String eventInfo = currentTile.enteredTile(stats,itemslots);
-                textArea.appendText(eventInfo+"\n");
-                if (!isUsed){
+                String eventInfo = currentTile.enteredTile(stats, itemslots, cordMatrix, player);
+                textArea.appendText(eventInfo + "\n");
+                if (!isUsed) {
                     currentTile.activate();
                 }
 
-                statLabels.setHp(String.valueOf(stats.getHealth()),String.valueOf(stats.getMaxHealth()),stats.isAlive());
+                statLabels.setHp(String.valueOf(stats.getHealth()), String.valueOf(stats.getMaxHealth()), stats.isAlive());
                 statLabels.setDamage(String.valueOf(stats.getDmg()));
+                statLabels.setDefence(String.valueOf(stats.getDefence()));
 
                 cordMatrix[player.getX()][player.getY()] = true;
                 Map.visualizeMap(mapArea, mapTiles, cordMatrix);
@@ -125,9 +137,13 @@ public class ServerCommunicator implements Runnable {
                 List<String> availableDirections = gson.fromJson(dis.readUTF(), ClientMovementRequest.class).getDirections();
                 updateButtons(availableDirections);
 
+                if (itemslots.hasLaternToRemove())
+                    itemslots.removeLatern(stats);
+
+
                 running = stats.isAlive();
-                if (!running){
-                    textArea.appendText("You are dead now, gg.");
+                if (!running) {
+                    textArea.appendText("You are dead now, gg. ");
                     this.close(false);
                     break;
                 }
@@ -143,7 +159,7 @@ public class ServerCommunicator implements Runnable {
                     break;
                 }
 
-                scoutAround(cordMatrix, directionHolder, stats);
+                scoutAround(cordMatrix, directionHolder);
                 textArea.appendText("--------------------------------------------------\n\n");
 
                 System.out.println(directionHolder.getDirection());
@@ -157,15 +173,14 @@ public class ServerCommunicator implements Runnable {
         buttons.disableAll();
     }
 
-    private void scoutAround(boolean[][] cordMatrix, DirectionHolder directionHolder, PlayerStats stats) {
-        if(directionHolder.getDirection().equals(Direction.SEARCH) || itemslots.hasLatern()) {
+    private void scoutAround(boolean[][] cordMatrix, DirectionHolder directionHolder) {
+        if (directionHolder.getDirection().equals(Direction.SEARCH)) {
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
-                    if(player.getY()+i >= 0 && player.getY() < cordMatrix.length && player.getX()+j >= 0 && player.getX()+j < cordMatrix.length)
-                    cordMatrix[player.getX()+j][player.getY()+i] = true;
+                    if (player.getY() + i >= 0 && player.getY() < cordMatrix.length && player.getX() + j >= 0 && player.getX() + j < cordMatrix.length)
+                        cordMatrix[player.getX() + j][player.getY() + i] = true;
                 }
             }
-            itemslots.removeLatern(stats);
         }
     }
     private void calculateDamage(Battle battle){
@@ -176,7 +191,7 @@ public class ServerCommunicator implements Runnable {
         this.running = false;
     }
 
-    public boolean isRunning(){
+    public boolean isRunning() {
         return running;
     }
 

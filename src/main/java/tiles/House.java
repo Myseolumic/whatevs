@@ -3,6 +3,7 @@ package tiles;
 import inventory.*;
 import client.ItemList;
 import client.PlayerStats;
+import server.Player;
 
 public class House implements Tile {
 
@@ -15,22 +16,25 @@ public class House implements Tile {
     private boolean isActivated = false;
 
     @Override
-    public String enteredTile(PlayerStats player, ItemList itemList) {
+    public String enteredTile(PlayerStats stats, ItemList itemList, boolean[][] cordMatrix, Player player) {
         String event = "";
         if (!isActivated) {
-            int randomEvent = (int) Math.ceil(Math.random() * 3);
+            int randomEvent = (int) Math.ceil(Math.random() * 4);
             switch (randomEvent) {
                 case 1://trap
-                    player.setHealth(player.getHealth() - 5);
-                    event = "A shotgun triggered as you opened the door. Took 5 damage. " + (roomsUnchecked - 1) + " rooms unchecked.";
+                    stats.setHealth(stats.getHealth() + 5);
+                    event = "You found bandages. Regained 5 hp " + (roomsUnchecked - 1) + " rooms unchecked.";
                     break;
                 case 2://loot
                     Item loot = Chest.getItem();
-                    itemList.addItem(loot, itemList.getItemGridPane(), player);
+                    itemList.addItem(loot, itemList.getItemGridPane(), stats, cordMatrix, player);
                     event = "You see Walmart bags in the corner. Found " + loot.getName() + "! " + (roomsUnchecked - 1) + " rooms unchecked.";
                     break;
                 case 3://nothing
-                    event = "Did not find anything from this room. " + (roomsUnchecked - 1) + " rooms unchecked.";
+                    event = "Did not find anything from this room. " + (roomsUnchecked - 1) + " room(s) unchecked.";
+                    break;
+                case 4://nothing
+                    event = "Did not find anything from this room. " + (roomsUnchecked - 1) + " room(s) unchecked.";
                     break;
 
             }

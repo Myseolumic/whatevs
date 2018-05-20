@@ -2,6 +2,7 @@ package tiles;
 
 import client.ItemList;
 import client.PlayerStats;
+import server.Player;
 
 public class Trap implements Tile {
     private boolean isActivated = false;
@@ -12,15 +13,16 @@ public class Trap implements Tile {
     }
 
     @Override
-    public String enteredTile(PlayerStats player, ItemList itemList ) {
+    public String enteredTile(PlayerStats stats, ItemList itemList, boolean[][] cordMatrix, Player player) {
         if (!isActivated) {
+            stats.setHealth(stats.getHealth() - 4);
             for (int i = 0; i < itemList.getSize(); i++) {
                 if (itemList.getItemArray()[i] != null && ( i == itemList.getSize()-1 || itemList.getItemArray()[i+1] == null)) {
-                    itemList.removeItem(itemList.getItemGridPane(), player, i);
+                    itemList.removeItem(itemList.getItemGridPane(), stats, i);
                     break;
                 }
             }
-            return "You have stumbled upon a queer looking contraption..";
+            return "You have stumbled upon a queer looking contraption.. You lost an item and 4 health";
         } else {
             return "You see a pile of blood on the ground. Someone got fucked up here";
         }

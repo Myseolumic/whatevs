@@ -2,11 +2,11 @@ package tiles;
 
 import client.ItemList;
 import client.PlayerStats;
-import javafx.scene.layout.GridPane;
+import server.Player;
 
 public class Dark implements Tile {
     @Override
-    public String enteredTile(PlayerStats player, ItemList itemList) {
+    public String enteredTile(PlayerStats stats, ItemList itemList, boolean[][] cordMatrix, Player player) {
         return "";
     }
 
