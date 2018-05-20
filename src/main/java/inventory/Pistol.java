@@ -15,7 +15,7 @@ public class Pistol implements Item {
 
     @Override
     public String getName() {
-        return "PowPow pistol";
+        return "a 44 magnum handgun";
     }
 
     @Override

@@ -5,6 +5,7 @@ import client.PlayerStats;
 public class Kevlar implements Item {
     @Override
     public void getBonus(PlayerStats player) {
+        player.setMaxHealth(player.getMaxHealth()+3);
         player.setHealth(player.getHealth() + 3);
     }
 
@@ -15,11 +16,12 @@ public class Kevlar implements Item {
 
     @Override
     public String getName() {
-        return "Strong-ass kevlar ";
+        return "a strong-ass kevlar ";
     }
 
     @Override
-    public void removeBonus(PlayerStats playerStats) {
-        playerStats.setHealth(playerStats.getHealth()-3);
+    public void removeBonus(PlayerStats player) {
+        player.setMaxHealth(player.getMaxHealth()-3);
+        player.setHealth(player.getHealth());
     }
 }

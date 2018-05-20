@@ -14,13 +14,14 @@ public class Trap implements Tile {
     @Override
     public String enteredTile(PlayerStats player, ItemList itemList ) {
         if (!isActivated) {
+            player.setHealth(player.getHealth() - 4);
             for (int i = 0; i < itemList.getSize(); i++) {
                 if (itemList.getItemArray()[i] != null && ( i == itemList.getSize()-1 || itemList.getItemArray()[i+1] == null)) {
                     itemList.removeItem(itemList.getItemGridPane(), player, i);
                     break;
                 }
             }
-            return "You have stumbled upon a queer looking contraption..";
+            return "You have stumbled upon a queer looking contraption.. You lost an item and 4 health";
         } else {
             return "You see a pile of blood on the ground. Someone got fucked up here";
         }

@@ -21,23 +21,23 @@ public class PlayerStats {
         this.animalClass = classes[randomClass];
         switch (randomClass) {
             case 0:
-                this.dmg = 5;
-                this.health = 14;
-                this.maxHealth = 14;
+                this.dmg = 6;
+                this.health = 10;
+                this.maxHealth = 10;
                 this.portraitPath = "TileSprites/hedgehog.png";
-                this.defence = 6;
+                this.defence = 5;
                 break;
             case 1:
-                this.dmg = 4;
+                this.dmg = 6;
                 this.health = 20;
                 this.maxHealth = 20;
                 this.portraitPath = "TileSprites/moose.png";
-                this.defence = 5;
+                this.defence = 2;
                 break;
             case 2:
                 this.dmg = 7;
-                this.health = 10;
-                this.maxHealth = 10;
+                this.health = 14;
+                this.maxHealth = 14;
                 this.portraitPath = "TileSprites/wolf.png";
                 this.defence = 3;
                 break;
@@ -53,7 +53,11 @@ public class PlayerStats {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        if (health >= maxHealth) {
+            this.health = this.maxHealth;
+        } else {
+            this.health = health;
+        }
         if (this.health <= 0) {
             isAlive = false;
         }
@@ -77,6 +81,10 @@ public class PlayerStats {
 
     public int getMaxHealth() {
         return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
     }
 
     public boolean isAlive() {

@@ -16,7 +16,7 @@ public class Lantern implements Item {
 
     @Override
     public String getName() {
-        return "really light latern";
+        return "a really light latern";
     }
 
     @Override
