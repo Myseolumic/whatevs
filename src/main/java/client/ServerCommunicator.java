@@ -29,6 +29,7 @@ public class ServerCommunicator implements Runnable {
     private TextField textField;
     private Buttons buttons;
     private StatLabels statLabels;
+    private StatsAndPort portrait;
     private Player player;
     private PlayerStats stats;
     private DataInputStream dis;
@@ -41,13 +42,12 @@ public class ServerCommunicator implements Runnable {
         this.serverSocket = new Socket("127.0.0.1", 1337);
         this.dis = new DataInputStream(serverSocket.getInputStream());
         this.dos = new DataOutputStream(serverSocket.getOutputStream());
-        this.stats = new PlayerStats();
-        portrait.setImage(new ImageView(stats.getPortraitPath()));
         this.mapArea = mapArea;
         this.textArea = textArea;
         this.textField = textField;
         this.buttons = buttons;
         this.statLabels = statLabels;
+        this.portrait = portrait;
     }
 
     public void close(boolean quit) throws IOException {
@@ -64,9 +64,6 @@ public class ServerCommunicator implements Runnable {
     public void run() {
         try {
             Gson gson = new Gson();
-            statLabels.setName(stats.getName(), stats.getAnimalClass());
-            statLabels.setDamage(String.valueOf(stats.getDmg()));
-            statLabels.setDefence(String.valueOf(stats.getDefence()));
 
             Tile[][] mapTiles = gson.fromJson(dis.readUTF(), MapData.class).getMapTiles();
             boolean[][] cordMatrix = Map.generateBoolMatrix(mapTiles.length);
@@ -98,6 +95,14 @@ public class ServerCommunicator implements Runnable {
 
                 directionHolder.setDirection(Direction.STOP);
                 player = gson.fromJson(dis.readUTF(), Player.class);
+                if(turn == 1){
+                    this.stats = new PlayerStats(player.getAnimalClass());
+                    statLabels.setName(stats.getName(), stats.getAnimalClass());
+                    statLabels.setDamage(String.valueOf(stats.getDmg()));
+                    statLabels.setDefence(String.valueOf(stats.getDefence()));
+                    portrait.setImage(new ImageView(stats.getPortraitPath()));
+                }
+
                 boolean isUsed = dis.readBoolean(); //works
                 boolean battleHappens = dis.readBoolean();
 
@@ -187,6 +192,26 @@ public class ServerCommunicator implements Runnable {
         System.out.println(battle.getTarget());
 
         //TODO: remove health etc.
+        String animalClass = battle.getTarget().getAnimalClass();
+        System.out.println(animalClass);
+        if (animalClass.equals("Hedgehog")){
+            textArea.appendText("You battled a Hedgehog! Damn it's pointy!");
+            int dmg = stats.getHealth()+stats.getDefence()-6;
+            stats.setHealth(dmg);
+            textArea.appendText("You took "+dmg+" points of damage");
+        }
+        if (animalClass.equals("Moose")){
+            textArea.appendText("You battled a Moose! I thought they were vegan...");
+            int dmg = stats.getHealth()+stats.getDefence()-6;
+            stats.setHealth(dmg);
+            textArea.appendText("You took "+dmg+" points of damage");
+        }
+        if (animalClass.equals("Wolf")){
+            textArea.appendText("OH F*** THAT'S A WOLF. RIP.");
+            int dmg = stats.getHealth()+stats.getDefence()-7;
+            stats.setHealth(dmg);
+            textArea.appendText("You took "+dmg+" points of damage");
+        }
     }
     public void stopRunning() {
         this.running = false;

@@ -1,5 +1,6 @@
 package client;
 
+import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -15,8 +16,10 @@ public class StatsAndPort {
     }
 
     public void setImage(ImageView image) {
-        statsAndPort.getChildren().clear();
-        statsAndPort.add(image,0,0);
-        statsAndPort.add(stats,0,0);
+        Platform.runLater(() -> {
+            statsAndPort.getChildren().clear();
+            statsAndPort.add(image,0,0);
+            statsAndPort.add(stats,0,0);
+        });
     }
 }

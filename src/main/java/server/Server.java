@@ -47,10 +47,13 @@ public class Server {
             //pre-game queue for connecting
             System.out.println("Waiting for clients...");
             List<Thread> threads = new ArrayList<>();
+            String[] classes = {"Hedgehog", "Moose", "Wolf"};
             while (threads.size() != players) {
                 Player player = new Player(threads.size(),
                         spawnLocations[threads.size()][0],
                         spawnLocations[threads.size()][1]);
+                int randomClass = (int) Math.floor(Math.random() * classes.length);
+                player.setAnimalClass(classes[randomClass]);
 
                 usedTiles[spawnLocations[threads.size()][1]][spawnLocations[threads.size()][0]] = true;
                 BlockingQueue<NextTurnData> childQueue = new ArrayBlockingQueue<>(1);
@@ -72,7 +75,6 @@ public class Server {
                     if (next.isFinished()) {
                         int queueId = next.getLocation().getId();
                         turnDatas.put(queueId, new NextTurnData(null,isTileUsed(next.getLocation(), usedTiles)));
-                        System.out.println(isTileUsed(next.getLocation(), usedTiles));
                         childLocations.put(queueId,next.getLocation());
                         usedTiles[next.getLocation().getY()][next.getLocation().getX()] = true;
                     } else {

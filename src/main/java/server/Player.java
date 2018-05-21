@@ -4,7 +4,7 @@ public class Player {
 
     private final int id;
     private int x, y;
-    //private String type?
+    private String animalClass;
 
     public Player(int id, int x, int y) {
         this.id = id;
@@ -30,6 +30,14 @@ public class Player {
 
     public int getY() {
         return y;
+    }
+
+    public String getAnimalClass(){
+        return animalClass;
+    }
+
+    public void setAnimalClass(String animalClass){
+        this.animalClass = animalClass;
     }
 
     public String getResourcePath() {
