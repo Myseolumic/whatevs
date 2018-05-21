@@ -25,6 +25,7 @@ public class PlayerStats {
         this.name = names[randomName];
         String[] possible = {"Hedgehog", "Moose", "Wolf"};
         List<String> classes = new ArrayList<>(Arrays.asList(possible));
+        this.animalClass = animalClass;
 
         switch (classes.indexOf(animalClass)) {
             case 0:
