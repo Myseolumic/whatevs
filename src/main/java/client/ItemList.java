@@ -29,14 +29,17 @@ public class ItemList {
     }
 
     public void addItem(Item item, GridPane itemsGridPane, PlayerStats stats, boolean[][] cordMatrix, Player player) {
-        for (int i = 0; i < itemArray.length; i++) {
-            if (itemArray[i] == null) {
-                itemArray[i] = item;
-                item.getBonus(stats, cordMatrix, player);
-                placeItem(item, itemsGridPane, i);
-                break;
-            }
-        }
+        Platform.runLater(() -> {
+                    for (int i = 0; i < itemArray.length; i++) {
+                        if (itemArray[i] == null) {
+                            itemArray[i] = item;
+                            item.getBonus(stats, cordMatrix, player);
+                            placeItem(item, itemsGridPane, i);
+                            break;
+                        }
+                    }
+                }
+        );
     }
 
     public void removeItem(GridPane itemsGridPane, PlayerStats player, int place) {
@@ -75,7 +78,7 @@ public class ItemList {
             if (itemArray[i] != null) {
                 if (itemArray[i].getName().equals("a really light latern")) {
                     if (itemArray[i].isActive() == 0)
-                    removeItem(itemGridPane, player, i);
+                        removeItem(itemGridPane, player, i);
                 }
             }
         }

@@ -185,6 +185,7 @@ public class ServerCommunicator implements Runnable {
     }
     private void calculateDamage(Battle battle){
         System.out.println(battle.getTarget());
+
         //TODO: remove health etc.
     }
     public void stopRunning() {
